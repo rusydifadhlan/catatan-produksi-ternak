@@ -1,0 +1,7124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Catatan Produksi</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f6f8;
+    color:#1f2937;
+    padding-bottom:85px;
+}
+
+.halaman{
+    display:none;
+    min-height:calc(100vh - 85px);
+}
+
+.halaman.aktif{
+    display:block;
+}
+
+.container{
+    width:100%;
+    max-width:700px;
+    margin:auto;
+    padding:20px 16px;
+}
+
+.header{
+    margin-bottom:18px;
+}
+
+.header h1{
+    font-size:25px;
+    margin-bottom:6px;
+}
+
+.header p{
+    color:#6b7280;
+    font-size:14px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:16px;
+    box-shadow:0 4px 18px rgba(0,0,0,.06);
+}
+
+.pembukuan-label{
+    font-size:13px;
+    color:#6b7280;
+    margin-bottom:7px;
+}
+
+.pembukuan-title{
+    font-size:17px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.select-pembukuan,
+select,
+input{
+    width:100%;
+    height:48px;
+    border:1px solid #d9dee5;
+    border-radius:12px;
+    background:white;
+    padding:0 13px;
+    font-size:15px;
+    outline:none;
+}
+
+select:focus,
+input:focus{
+    border-color:#4f46e5;
+}
+
+.form-card h2{
+    font-size:18px;
+    margin-bottom:16px;
+}
+
+.form-group{
+    margin-bottom:14px;
+}
+
+.form-group label{
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:7px;
+    color:#374151;
+}
+
+.row{
+    display:flex;
+    gap:10px;
+}
+
+.row .form-group{
+    flex:1;
+}
+
+.btn-primary{
+    width:100%;
+    height:50px;
+    border:none;
+    border-radius:14px;
+    background:#4f46e5;
+    color:white;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.btn-primary:active,
+.btn-danger-confirm:active,
+.btn-cancel:active{
+    transform:scale(.98);
+}
+
+.btn-cancel{
+    width:100%;
+    height:48px;
+    border:none;
+    border-radius:13px;
+    background:#eef0f3;
+    color:#374151;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.statistik{
+    display:flex;
+    gap:10px;
+    margin-bottom:6px;
+    padding-bottom:10px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x proximity;
+}
+
+.stat-card{
+    flex:0 0 calc(25% - 7.5px);
+    min-width:0;
+    scroll-snap-align:start;
+    background:white;
+    padding:15px 10px;
+    border-radius:16px;
+    text-align:center;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+
+.stat-card .angka{
+    font-size:23px;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+.stat-card .label{
+    font-size:11px;
+    color:#6b7280;
+    word-break:break-word;
+}
+
+.judul-list{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+}
+
+.judul-list h2{
+    font-size:18px;
+}
+
+.btn-hapus-semua{
+    border:none;
+    background:#fee2e2;
+    color:#dc2626;
+    border-radius:10px;
+    padding:8px 10px;
+    font-size:12px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.item-produksi{
+    border:1px solid #e5e7eb;
+    border-radius:15px;
+    padding:14px;
+    margin-bottom:10px;
+}
+
+.item-atas{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.jumlah{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.satuan{
+    color:#6b7280;
+    font-size:13px;
+}
+
+.tag-kategori{
+    display:inline-block;
+    background:#eef2ff;
+    color:#4f46e5;
+    padding:5px 9px;
+    border-radius:8px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.tag-kandang{
+    display:inline-block;
+    background:#ecfdf5;
+    color:#059669;
+    padding:5px 9px;
+    border-radius:8px;
+    font-size:11px;
+    font-weight:bold;
+    margin-left:5px;
+}
+
+.detail-produksi{
+    margin-top:9px;
+    color:#6b7280;
+    font-size:12px;
+}
+
+.item-bawah{
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    margin-top:12px;
+    gap:8px;
+}
+
+.aksi-produksi{
+    display:flex;
+    gap:6px;
+}
+
+.btn-edit,
+.btn-danger{
+    border:none;
+    border-radius:9px;
+    padding:8px 10px;
+    font-size:12px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.btn-edit{
+    background:#eef2ff;
+    color:#4f46e5;
+}
+
+.btn-danger{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+.bottom-nav{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    height:72px;
+    background:rgba(255,255,255,.97);
+    border-top:1px solid #e5e7eb;
+    display:flex;
+    justify-content:center;
+    z-index:100;
+}
+
+.nav-inner{
+    width:100%;
+    max-width:700px;
+    display:flex;
+}
+
+.nav-btn{
+    flex:1;
+    border:none;
+    background:transparent;
+    color:#9ca3af;
+    font-size:11px;
+    cursor:pointer;
+}
+
+.nav-btn span{
+    display:block;
+    font-size:21px;
+    margin-bottom:3px;
+}
+
+.nav-btn.aktif{
+    color:#4f46e5;
+    font-weight:bold;
+}
+
+.menu-setting{
+    background:white;
+    border-radius:17px;
+    overflow:hidden;
+    box-shadow:0 4px 18px rgba(0,0,0,.05);
+}
+
+.menu-setting button{
+    width:100%;
+    border:none;
+    border-bottom:1px solid #edf0f2;
+    background:white;
+    padding:17px;
+    text-align:left;
+    cursor:pointer;
+}
+
+.menu-setting button:last-child{
+    border-bottom:none;
+}
+
+.menu-icon{
+    font-size:22px;
+    width:38px;
+    display:inline-block;
+}
+
+.menu-title{
+    font-size:15px;
+    font-weight:bold;
+}
+
+.menu-desc{
+    margin-left:42px;
+    margin-top:3px;
+    color:#8a919b;
+    font-size:12px;
+}
+
+.back-btn{
+    border:none;
+    background:transparent;
+    font-size:15px;
+    padding:5px 0;
+    margin-bottom:15px;
+    color:#4f46e5;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.page-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+}
+
+.page-title .icon{
+    font-size:28px;
+}
+
+.page-title h2{
+    font-size:22px;
+}
+
+.card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:13px;
+}
+
+.card-header h3{
+    font-size:16px;
+}
+
+.btn-tambah{
+    border:none;
+    background:#4f46e5;
+    color:white;
+    border-radius:10px;
+    padding:9px 12px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.list-setting{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.setting-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border:1px solid #e5e7eb;
+    border-radius:13px;
+    padding:12px;
+}
+
+.setting-item-icon{
+    font-size:22px;
+}
+
+.setting-item-info{
+    flex:1;
+}
+
+.setting-item-name{
+    font-weight:bold;
+    font-size:14px;
+}
+
+.setting-item-status{
+    font-size:11px;
+    color:#6b7280;
+    margin-top:3px;
+}
+
+.setting-actions{
+    display:flex;
+    gap:5px;
+}
+
+.btn-icon{
+    border:none;
+    background:#f3f4f6;
+    border-radius:8px;
+    width:34px;
+    height:34px;
+    cursor:pointer;
+}
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.58);
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    z-index:1000;
+    backdrop-filter:blur(4px);
+}
+
+.modal-overlay.show{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:700px;
+    background:white;
+    border-radius:25px 25px 0 0;
+    padding:12px 20px 25px;
+    animation:slideUp .25s ease;
+}
+
+@keyframes slideUp{
+    from{
+        transform:translateY(100%);
+        opacity:0;
+    }
+    to{
+        transform:translateY(0);
+        opacity:1;
+    }
+}
+
+.modal-handle{
+    width:42px;
+    height:5px;
+    border-radius:20px;
+    background:#d1d5db;
+    margin:0 auto 18px;
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.modal-header h3{
+    font-size:19px;
+}
+
+.btn-close{
+    width:35px;
+    height:35px;
+    border:none;
+    background:#f3f4f6;
+    border-radius:50%;
+    font-size:18px;
+    cursor:pointer;
+}
+
+#modalEditProduksi{
+    align-items:center;
+    padding:16px;
+}
+
+#modalEditProduksi .modal-box{
+    border-radius:25px;
+    max-width:520px;
+    padding:18px 20px 22px;
+    animation:modalZoom .22s ease;
+}
+
+@keyframes modalZoom{
+    from{
+        transform:scale(.92);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+.edit-info{
+    background:#f5f3ff;
+    color:#4f46e5;
+    border-radius:12px;
+    padding:11px 13px;
+    font-size:12px;
+    margin-bottom:16px;
+}
+
+.edit-info strong{
+    display:block;
+    font-size:14px;
+    margin-bottom:3px;
+}
+
+.modal-actions{
+    display:flex;
+    gap:9px;
+    margin-top:18px;
+}
+
+.modal-actions button{
+    flex:1;
+}
+
+#modalKonfirmasiHapus,
+#modalKonfirmasiRestore,
+#modalPesan{
+    align-items:center;
+    padding:18px;
+}
+
+#modalKonfirmasiHapus .modal-box,
+#modalKonfirmasiRestore .modal-box,
+#modalPesan .modal-box{
+    max-width:390px;
+    border-radius:25px;
+    padding:25px 22px 22px;
+    text-align:center;
+    animation:modalZoom .22s ease;
+}
+
+.hapus-icon{
+    width:65px;
+    height:65px;
+    margin:0 auto 15px;
+    border-radius:50%;
+    background:#fee2e2;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+}
+
+.hapus-title{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.hapus-message{
+    color:#6b7280;
+    font-size:13px;
+    line-height:1.5;
+    margin-bottom:20px;
+}
+
+.hapus-highlight{
+    font-weight:bold;
+    color:#374151;
+}
+
+.hapus-actions{
+    display:flex;
+    gap:9px;
+}
+
+.hapus-actions button{
+    flex:1;
+}
+
+.btn-danger-confirm{
+    height:48px;
+    border:none;
+    border-radius:13px;
+    background:#dc2626;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+#modalPesan .hapus-icon{
+    background:#fef3c7;
+}
+
+#modalPesan .hapus-title{
+    color:#1f2937;
+}
+
+#modalPesan .btn-danger-confirm{
+    background:#4f46e5;
+}
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12px;
+}
+
+th,
+td{
+    padding:11px 8px;
+    border-bottom:1px solid #e5e7eb;
+    text-align:left;
+}
+
+th{
+    background:#f9fafb;
+}
+
+.kosong{
+    text-align:center;
+    color:#9ca3af;
+    padding:25px 10px;
+    font-size:13px;
+}
+
+/* ===== LOGIN / KUNCI ===== */
+
+.kunci-overlay{
+    position:fixed;
+    inset:0;
+    z-index:900;
+    background:linear-gradient(160deg,#4338ca 0%,#6d28d9 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    color:white;
+    overflow-y:auto;
+}
+
+.kunci-overlay.hide{
+    display:none;
+}
+
+.kunci-box{
+    width:100%;
+    max-width:330px;
+    text-align:center;
+}
+
+.kunci-logo{
+    width:72px;
+    height:72px;
+    margin:0 auto 16px;
+    border-radius:22px;
+    background:rgba(255,255,255,.18);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:36px;
+}
+
+.kunci-judul{
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+.kunci-sub{
+    font-size:13px;
+    opacity:.85;
+    margin-bottom:22px;
+    line-height:1.45;
+}
+
+.pin-dots{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    margin-bottom:12px;
+}
+
+.pin-dots span{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    border:2px solid rgba(255,255,255,.8);
+    transition:.12s;
+}
+
+.pin-dots span.isi{
+    background:white;
+    transform:scale(1.1);
+}
+
+.pin-dots.goyang{
+    animation:goyang .4s;
+}
+
+@keyframes goyang{
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-10px)}
+    40%{transform:translateX(10px)}
+    60%{transform:translateX(-8px)}
+    80%{transform:translateX(8px)}
+}
+
+.kunci-error{
+    min-height:20px;
+    font-size:12px;
+    color:#fecaca;
+    margin-bottom:12px;
+    font-weight:bold;
+}
+
+.keypad{
+    display:grid;
+    grid-template-columns:repeat(3,72px);
+    gap:14px;
+    justify-content:center;
+    margin-bottom:18px;
+}
+
+.keypad button{
+    width:72px;
+    height:72px;
+    border:none;
+    border-radius:50%;
+    background:rgba(255,255,255,.16);
+    color:white;
+    font-size:26px;
+    font-weight:bold;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:background .1s;
+}
+
+.keypad button:active{
+    background:rgba(255,255,255,.34);
+}
+
+.keypad button.kecil{
+    font-size:24px;
+}
+
+.keypad button.kosong{
+    visibility:hidden;
+}
+
+.kunci-links{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+}
+
+.kunci-links button{
+    border:none;
+    background:transparent;
+    color:rgba(255,255,255,.85);
+    font-size:13px;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+.bio-panel .bio-ikon{
+    font-size:56px;
+    margin-bottom:18px;
+}
+
+.bio-panel .btn-light{
+    width:100%;
+    height:50px;
+    border:none;
+    border-radius:14px;
+    background:white;
+    color:#4f46e5;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-bottom:10px;
+}
+
+.bio-panel .btn-ghost{
+    width:100%;
+    height:46px;
+    border:none;
+    background:transparent;
+    color:white;
+    font-size:14px;
+    cursor:pointer;
+}
+
+@media(max-height:640px){
+
+    .keypad{
+        grid-template-columns:repeat(3,62px);
+        gap:10px;
+    }
+
+    .keypad button{
+        width:62px;
+        height:62px;
+        font-size:22px;
+    }
+
+    .kunci-logo{
+        display:none;
+    }
+}
+
+@media(max-width:480px){
+
+    .container{
+        padding:18px 13px;
+    }
+
+    .statistik{
+        gap:7px;
+    }
+
+    .stat-card{
+        flex:0 0 calc(25% - 5.25px);
+        padding:13px 5px;
+    }
+
+    .stat-card .angka{
+        font-size:20px;
+    }
+
+    .aksi-produksi{
+        flex-wrap:wrap;
+    }
+
+    .btn-edit,
+    .btn-danger{
+        padding:7px 8px;
+    }
+}
+
+.fab-tambah{
+    position:fixed;
+    left:50%;
+    bottom:84px;
+    transform:translateX(-50%);
+    z-index:101;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    border:none;
+    border-radius:999px;
+    padding:12px 22px 12px 14px;
+    background:linear-gradient(135deg,#4f46e5,#6d5ef5);
+    color:white;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 8px 22px rgba(79,70,229,.45);
+    transition:transform .15s ease, box-shadow .15s ease;
+}
+
+.fab-tambah:active{
+    transform:translateX(-50%) scale(.94);
+    box-shadow:0 4px 12px rgba(79,70,229,.4);
+}
+
+.fab-plus{
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    background:rgba(255,255,255,.22);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+    line-height:1;
+    padding-bottom:2px;
+}
+
+.fab-tambah.sembunyi{
+    display:none;
+}
+
+.modal-tambah{
+    max-height:92vh;
+    overflow-y:auto;
+}
+
+#modalTambahProduksi .row{
+    gap:10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
+<div id="halamanDashboard" class="halaman aktif">
+
+<div class="container">
+
+    <div class="header">
+        <h1>📊 Catatan Produksi</h1>
+        <p>Catat hasil produksi harian dengan mudah</p>
+    </div>
+
+    <div class="card pembukuan-card">
+
+        <div class="pembukuan-label">
+            📚 Pembukuan
+        </div>
+
+        <div
+            class="pembukuan-title"
+            id="namaPembukuanAktif">
+            -
+        </div>
+
+        <select
+            id="selectPembukuan"
+            class="select-pembukuan"
+            onchange="pilihPembukuan(this.value)">
+        </select>
+
+    </div>
+
+    <div class="statistik" id="statistikPembukuan"></div>
+
+    <div class="card">
+
+        <div class="judul-list">
+
+            <h2>📋 Daftar Produksi</h2>
+
+            <button
+                class="btn-hapus-semua"
+                onclick="mintaHapusSemua()">
+
+                Hapus Semua
+
+            </button>
+
+        </div>
+
+        <input
+            type="text"
+            id="cariProduksi"
+            placeholder="🔍 Cari tanggal, sekat, atau jumlah telur..."
+            style="margin-bottom:12px"
+            oninput="tampilkanCatatan()">
+
+        <div id="daftarProduksi"></div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     LAPORAN
+===================================================== -->
+
+<div id="halamanLaporan" class="halaman">
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>📋 Laporan Produksi</h1>
+
+        <p>
+            Laporan pembukuan:
+            <strong id="namaPembukuanLaporan">-</strong>
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <div class="form-group">
+
+            <label>Filter Laporan</label>
+
+            <select
+                id="filterPeriode"
+                onchange="ubahFilterPeriode()">
+
+                <option value="semua">Semua</option>
+                <option value="harian">Harian</option>
+                <option value="bulanan">Bulanan</option>
+                <option value="tahunan">Tahunan</option>
+
+            </select>
+
+        </div>
+
+        <div
+            class="form-group"
+            id="wrapFilterHarian"
+            style="display:none">
+
+            <label>Tanggal</label>
+
+            <input
+                type="date"
+                id="filterHarian"
+                onchange="tampilkanLaporan()">
+
+        </div>
+
+        <div
+            class="form-group"
+            id="wrapFilterBulanan"
+            style="display:none">
+
+            <label>Bulan</label>
+
+            <input
+                type="month"
+                id="filterBulanan"
+                onchange="tampilkanLaporan()">
+
+        </div>
+
+        <div
+            class="form-group"
+            id="wrapFilterTahunan"
+            style="display:none">
+
+            <label>Tahun</label>
+
+            <input
+                type="number"
+                id="filterTahunan"
+                min="2000"
+                max="2100"
+                placeholder="Contoh: 2026"
+                oninput="tampilkanLaporan()">
+
+        </div>
+
+        <div class="row">
+
+            <button
+                class="btn-primary"
+                style="height:46px"
+                onclick="eksporPDF()">
+
+                📄 Ekspor PDF
+
+            </button>
+
+            <button
+                class="btn-primary"
+                style="height:46px"
+                onclick="eksporExcel()">
+
+                📊 Ekspor Excel
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>No.</th>
+                        <th>Tanggal</th>
+                        <th>Jam</th>
+                        <th>Catatan</th>
+                        <th>Kandang / Sekat</th>
+                        <th>Jumlah</th>
+                        <th>Satuan</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="tabelLaporan"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     PENGATURAN
+===================================================== -->
+
+<div id="halamanPengaturan" class="halaman">
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>⚙️ Pengaturan</h1>
+
+        <p>Kelola pengaturan aplikasi</p>
+
+    </div>
+
+    <div class="menu-setting">
+
+        <button onclick="bukaDaftarPembukuan()">
+
+            <span class="menu-icon">📚</span>
+
+            <span class="menu-title">
+                Daftar Pembukuan
+            </span>
+
+            <div class="menu-desc">
+                Tambah dan kelola pembukuan
+            </div>
+
+        </button>
+
+        <button onclick="bukaDaftarKategoriCatatan()">
+
+            <span class="menu-icon">🏷️</span>
+
+            <span class="menu-title">
+                Kategori Catatan
+            </span>
+
+            <div class="menu-desc">
+                Tambah dan kelola kategori catatan
+            </div>
+
+        </button>
+
+        <button onclick="bukaDaftarKategoriSatuan()">
+
+            <span class="menu-icon">📏</span>
+
+            <span class="menu-title">
+                Kategori Satuan
+            </span>
+
+            <div class="menu-desc">
+                Tambah dan kelola satuan produksi
+            </div>
+
+        </button>
+
+        <button onclick="bukaDaftarKategoriKandang()">
+
+            <span class="menu-icon">🏠</span>
+
+            <span class="menu-title">
+                Kategori Kandang / Sekat
+            </span>
+
+            <div class="menu-desc">
+                Tambah dan kelola kandang atau sekat produksi
+            </div>
+
+        </button>
+
+        <button onclick="bukaKeamanan()">
+
+            <span class="menu-icon">🔒</span>
+
+            <span class="menu-title">
+                Keamanan
+            </span>
+
+            <div class="menu-desc">
+                PIN dan biometrik untuk mengunci aplikasi
+            </div>
+
+        </button>
+
+        <button onclick="bukaBackupRestore()">
+
+            <span class="menu-icon">💾</span>
+
+            <span class="menu-title">
+                Backup &amp; Restore
+            </span>
+
+            <div class="menu-desc">
+                Simpan cadangan data dan pulihkan dari file
+            </div>
+
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     BACKUP & RESTORE
+===================================================== -->
+
+<div id="halamanBackup" class="halaman">
+
+<div class="container">
+
+    <button
+        class="back-btn"
+        onclick="kembaliKePengaturan()">
+
+        ← Kembali
+
+    </button>
+
+    <div class="page-title">
+
+        <span class="icon">💾</span>
+
+        <h2>Backup &amp; Restore</h2>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h3>Backup Data</h3>
+
+        </div>
+
+        <div class="edit-info">
+            <strong id="infoDataBackup">-</strong>
+            Berisi semua pembukuan, data produksi, dan kategori
+            (catatan, satuan, kandang / sekat). PIN dan biometrik
+            tidak ikut dicadangkan.
+        </div>
+
+        <button
+            class="btn-primary"
+            onclick="unduhBackup()">
+
+            ⬇️ Unduh Backup
+
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h3>Restore Data</h3>
+
+        </div>
+
+        <div class="edit-info">
+            <strong>Pulihkan dari file backup (.json)</strong>
+            Semua data di aplikasi ini akan diganti dengan isi
+            file backup. Disarankan unduh backup terlebih dahulu.
+        </div>
+
+        <input
+            type="file"
+            id="fileRestore"
+            accept=".json,application/json"
+            style="display:none"
+            onchange="pilihFileRestore(this)">
+
+        <button
+            class="btn-primary"
+            onclick="document.getElementById('fileRestore').click()">
+
+            ⬆️ Pilih File Backup
+
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     DAFTAR PEMBUKUAN
+===================================================== -->
+
+<div id="halamanDaftarPembukuan" class="halaman">
+
+<div class="container">
+
+    <button
+        class="back-btn"
+        onclick="kembaliKePengaturan()">
+
+        ← Kembali
+
+    </button>
+
+    <div class="page-title">
+
+        <span class="icon">📚</span>
+
+        <h2>Daftar Pembukuan</h2>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h3>Pembukuan</h3>
+
+            <button
+                class="btn-tambah"
+                onclick="bukaModalPembukuan()">
+
+                + Tambah
+
+            </button>
+
+        </div>
+
+        <div
+            id="daftarPembukuanContainer"
+            class="list-setting">
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     DAFTAR KATEGORI CATATAN
+===================================================== -->
+
+<div id="halamanDaftarKategoriCatatan" class="halaman">
+
+<div class="container">
+
+    <button
+        class="back-btn"
+        onclick="kembaliKePengaturan()">
+
+        ← Kembali
+
+    </button>
+
+    <div class="page-title">
+
+        <span class="icon">🏷️</span>
+
+        <h2>Kategori Catatan</h2>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h3>Daftar Kategori</h3>
+
+            <button
+                class="btn-tambah"
+                onclick="bukaModalKategoriCatatan()">
+
+                + Tambah
+
+            </button>
+
+        </div>
+
+        <div
+            id="daftarKategoriCatatanContainer"
+            class="list-setting">
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     DAFTAR KATEGORI SATUAN
+===================================================== -->
+
+<div id="halamanDaftarKategoriSatuan" class="halaman">
+
+<div class="container">
+
+    <button
+        class="back-btn"
+        onclick="kembaliKePengaturan()">
+
+        ← Kembali
+
+    </button>
+
+    <div class="page-title">
+
+        <span class="icon">📏</span>
+
+        <h2>Kategori Satuan</h2>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h3>Daftar Satuan</h3>
+
+            <button
+                class="btn-tambah"
+                onclick="bukaModalKategoriSatuan()">
+
+                + Tambah
+
+            </button>
+
+        </div>
+
+        <div
+            id="daftarKategoriSatuanContainer"
+            class="list-setting">
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     DAFTAR KATEGORI KANDANG
+===================================================== -->
+
+<div id="halamanDaftarKategoriKandang" class="halaman">
+
+<div class="container">
+
+    <button
+        class="back-btn"
+        onclick="kembaliKePengaturan()">
+
+        ← Kembali
+
+    </button>
+
+    <div class="page-title">
+
+        <span class="icon">🏠</span>
+
+        <h2>Kategori Kandang / Sekat</h2>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h3>Daftar Kandang / Sekat</h3>
+
+            <button
+                class="btn-tambah"
+                onclick="bukaModalKategoriKandang()">
+
+                + Tambah
+
+            </button>
+
+        </div>
+
+        <div
+            id="daftarKategoriKandangContainer"
+            class="list-setting">
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     KEAMANAN
+===================================================== -->
+
+<div id="halamanKeamanan" class="halaman">
+
+<div class="container">
+
+    <button
+        class="back-btn"
+        onclick="kembaliKePengaturan()">
+
+        ← Kembali
+
+    </button>
+
+    <div class="page-title">
+
+        <span class="icon">🔒</span>
+
+        <h2>Keamanan</h2>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h3>Kunci Aplikasi</h3>
+
+        </div>
+
+        <div class="list-setting">
+
+            <div class="setting-item">
+
+                <div class="setting-item-icon">🔢</div>
+
+                <div class="setting-item-info">
+
+                    <div class="setting-item-name">PIN</div>
+
+                    <div class="setting-item-status">
+                        PIN 6 digit aktif
+                    </div>
+
+                </div>
+
+                <button
+                    class="btn-tambah"
+                    onclick="ubahPin()">
+
+                    Ubah
+
+                </button>
+
+            </div>
+
+            <div class="setting-item">
+
+                <div class="setting-item-icon">👆</div>
+
+                <div class="setting-item-info">
+
+                    <div class="setting-item-name">Biometrik</div>
+
+                    <div
+                        class="setting-item-status"
+                        id="statusBiometrik">
+                        -
+                    </div>
+
+                </div>
+
+                <button
+                    class="btn-tambah"
+                    id="btnToggleBiometrik"
+                    onclick="toggleBiometrik()">
+
+                    Aktifkan
+
+                </button>
+
+            </div>
+
+            <div class="setting-item">
+
+                <div class="setting-item-icon">🔐</div>
+
+                <div class="setting-item-info">
+
+                    <div class="setting-item-name">Kunci Sekarang</div>
+
+                    <div class="setting-item-status">
+                        Kembali ke layar login
+                    </div>
+
+                </div>
+
+                <button
+                    class="btn-tambah"
+                    onclick="kunciSekarang()">
+
+                    Kunci
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <div
+            id="catatanBiometrik"
+            style="font-size:12px;color:#6b7280;line-height:1.5;margin-top:14px">
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL PEMBUKUAN
+===================================================== -->
+
+<div
+    id="modalPembukuan"
+    class="modal-overlay"
+    onclick="tutupJikaOverlay(event,'modalPembukuan')">
+
+    <div class="modal-box">
+
+        <div class="modal-handle"></div>
+
+        <div class="modal-header">
+
+            <h3 id="judulModalPembukuan">
+                📚 Tambah Pembukuan
+            </h3>
+
+            <button
+                class="btn-close"
+                onclick="tutupModal('modalPembukuan')">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Nama Pembukuan</label>
+
+            <input
+                type="text"
+                id="namaPembukuan"
+                placeholder="Contoh: Produksi Bebek">
+
+        </div>
+
+        <button
+            class="btn-primary"
+            onclick="simpanPembukuan()">
+
+            Simpan
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL KATEGORI CATATAN
+===================================================== -->
+
+<div
+    id="modalKategoriCatatan"
+    class="modal-overlay"
+    onclick="tutupJikaOverlay(event,'modalKategoriCatatan')">
+
+    <div class="modal-box">
+
+        <div class="modal-handle"></div>
+
+        <div class="modal-header">
+
+            <h3 id="judulModalKategoriCatatan">
+                🏷️ Tambah Kategori
+            </h3>
+
+            <button
+                class="btn-close"
+                onclick="tutupModal('modalKategoriCatatan')">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Nama Kategori</label>
+
+            <input
+                type="text"
+                id="namaKategoriCatatan"
+                placeholder="Contoh: Besar">
+
+        </div>
+
+        <button
+            class="btn-primary"
+            onclick="simpanKategoriCatatan()">
+
+            Simpan
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL KATEGORI SATUAN
+===================================================== -->
+
+<div
+    id="modalKategoriSatuan"
+    class="modal-overlay"
+    onclick="tutupJikaOverlay(event,'modalKategoriSatuan')">
+
+    <div class="modal-box">
+
+        <div class="modal-handle"></div>
+
+        <div class="modal-header">
+
+            <h3 id="judulModalKategoriSatuan">
+                📏 Tambah Satuan
+            </h3>
+
+            <button
+                class="btn-close"
+                onclick="tutupModal('modalKategoriSatuan')">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Nama Satuan</label>
+
+            <input
+                type="text"
+                id="namaKategoriSatuan"
+                placeholder="Contoh: Butir">
+
+        </div>
+
+        <button
+            class="btn-primary"
+            onclick="simpanKategoriSatuan()">
+
+            Simpan
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL KATEGORI KANDANG
+===================================================== -->
+
+<div
+    id="modalKategoriKandang"
+    class="modal-overlay"
+    onclick="tutupJikaOverlay(event,'modalKategoriKandang')">
+
+    <div class="modal-box">
+
+        <div class="modal-handle"></div>
+
+        <div class="modal-header">
+
+            <h3 id="judulModalKategoriKandang">
+                🏠 Tambah Kandang / Sekat
+            </h3>
+
+            <button
+                class="btn-close"
+                onclick="tutupModal('modalKategoriKandang')">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Nama Kandang / Sekat</label>
+
+            <input
+                type="text"
+                id="namaKategoriKandang"
+                placeholder="Contoh: Kandang A">
+
+        </div>
+
+        <button
+            class="btn-primary"
+            onclick="simpanKategoriKandang()">
+
+            Simpan
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL TAMBAH PRODUKSI
+===================================================== -->
+
+<div
+    id="modalTambahProduksi"
+    class="modal-overlay"
+    onclick="tutupJikaOverlay(event,'modalTambahProduksi')">
+
+    <div class="modal-box modal-tambah">
+
+        <div class="modal-handle"></div>
+
+        <div class="modal-header">
+
+            <h3>➕ Tambah Produksi</h3>
+
+            <button
+                class="btn-close"
+                onclick="tutupModalTambahProduksi()">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Catatan</label>
+
+            <select id="inputCatatan"></select>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Kandang / Sekat</label>
+
+            <select id="inputKandang"></select>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Jumlah Produksi</label>
+
+            <div class="row">
+
+                <div class="form-group">
+
+                    <input
+                        type="number"
+                        id="jumlahProduksi"
+                        min="0"
+                        placeholder="Jumlah">
+
+                </div>
+
+                <div class="form-group">
+
+                    <select id="satuan"></select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="form-group">
+
+                <label>Tanggal</label>
+
+                <input
+                    type="date"
+                    id="inputTanggal">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Jam</label>
+
+                <input
+                    type="time"
+                    id="inputJam">
+
+            </div>
+
+        </div>
+
+        <button
+            id="btnSimpanProduksi"
+            class="btn-primary"
+            onclick="tambahCatatan()">
+
+            + Simpan Produksi
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL EDIT PRODUKSI
+===================================================== -->
+
+<div
+    id="modalEditProduksi"
+    class="modal-overlay"
+    onclick="tutupJikaOverlay(event,'modalEditProduksi')">
+
+    <div class="modal-box">
+
+        <div class="modal-handle"></div>
+
+        <div class="modal-header">
+
+            <h3>✏️ Edit Produksi</h3>
+
+            <button
+                class="btn-close"
+                onclick="tutupModalEditProduksi()">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <div class="edit-info">
+
+            <strong>Ubah data produksi</strong>
+
+            Perubahan akan langsung diterapkan
+            pada daftar produksi.
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Catatan</label>
+
+            <select id="editCatatan"></select>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Kandang / Sekat</label>
+
+            <select id="editKandang"></select>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Jumlah Produksi</label>
+
+            <div class="row">
+
+                <div class="form-group">
+
+                    <input
+                        type="number"
+                        id="editJumlah"
+                        min="0"
+                        placeholder="Jumlah">
+
+                </div>
+
+                <div class="form-group">
+
+                    <select id="editSatuan"></select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="form-group">
+
+                <label>Tanggal</label>
+
+                <input
+                    type="date"
+                    id="editTanggal">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Jam</label>
+
+                <input
+                    type="time"
+                    id="editJam">
+
+            </div>
+
+        </div>
+
+        <div class="modal-actions">
+
+            <button
+                class="btn-cancel"
+                onclick="tutupModalEditProduksi()">
+
+                Batal
+
+            </button>
+
+            <button
+                class="btn-primary"
+                onclick="simpanEditProduksi()">
+
+                ✓ Simpan Perubahan
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL KONFIRMASI HAPUS
+===================================================== -->
+
+<div
+    id="modalKonfirmasiHapus"
+    class="modal-overlay"
+    onclick="tutupJikaOverlay(event,'modalKonfirmasiHapus')">
+
+    <div class="modal-box">
+
+        <div class="hapus-icon">
+            🗑️
+        </div>
+
+        <div class="hapus-title">
+            Hapus Data?
+        </div>
+
+        <div
+            class="hapus-message"
+            id="pesanKonfirmasiHapus">
+
+            Data yang dihapus tidak dapat
+            dikembalikan.
+
+        </div>
+
+        <div class="hapus-actions">
+
+            <button
+                class="btn-cancel"
+                onclick="tutupModal('modalKonfirmasiHapus')">
+
+                Batal
+
+            </button>
+
+            <button
+                class="btn-danger-confirm"
+                onclick="jalankanHapus()">
+
+                🗑️ Hapus
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL KONFIRMASI RESTORE
+===================================================== -->
+
+<div
+    id="modalKonfirmasiRestore"
+    class="modal-overlay"
+    onclick="tutupJikaOverlay(event,'modalKonfirmasiRestore')">
+
+    <div class="modal-box">
+
+        <div class="hapus-icon">
+            ♻️
+        </div>
+
+        <div class="hapus-title">
+            Pulihkan Data?
+        </div>
+
+        <div
+            class="hapus-message"
+            id="pesanKonfirmasiRestore">
+        </div>
+
+        <div class="hapus-actions">
+
+            <button
+                class="btn-cancel"
+                onclick="batalRestore()">
+
+                Batal
+
+            </button>
+
+            <button
+                class="btn-danger-confirm"
+                onclick="jalankanRestore()">
+
+                ♻️ Pulihkan
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL PESAN
+===================================================== -->
+
+<div
+    id="modalPesan"
+    class="modal-overlay"
+    onclick="tutupJikaOverlay(event,'modalPesan')">
+
+    <div class="modal-box">
+
+        <div
+            class="hapus-icon"
+            id="ikonModalPesan">
+
+            ⚠️
+
+        </div>
+
+        <div
+            class="hapus-title"
+            id="judulModalPesan">
+
+            Data Belum Lengkap
+
+        </div>
+
+        <div
+            class="hapus-message"
+            id="isiModalPesan">
+
+            Silakan periksa kembali data yang diisi.
+
+        </div>
+
+        <button
+            class="btn-danger-confirm"
+            style="width:100%;"
+            onclick="tutupModalPesan()">
+
+            Mengerti
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     NAVIGASI
+===================================================== -->
+
+<div class="bottom-nav">
+
+<div class="nav-inner">
+
+    <button
+        id="navDashboard"
+        class="nav-btn aktif"
+        onclick="bukaHalaman('dashboard')">
+
+        <span>📊</span>
+        Dashboard
+
+    </button>
+
+    <button
+        id="navLaporan"
+        class="nav-btn"
+        onclick="bukaHalaman('laporan')">
+
+        <span>📋</span>
+        Laporan
+
+    </button>
+
+    <button
+        id="navPengaturan"
+        class="nav-btn"
+        onclick="bukaHalaman('pengaturan')">
+
+        <span>⚙️</span>
+        Pengaturan
+
+    </button>
+
+</div>
+
+</div>
+
+
+<button
+    id="btnFabTambah"
+    class="fab-tambah"
+    onclick="bukaModalTambahProduksi()"
+    aria-label="Tambah produksi">
+
+    <span class="fab-plus">+</span>
+    Tambah
+
+</button>
+
+
+<!-- =====================================================
+     LAYAR KUNCI / LOGIN
+===================================================== -->
+
+<div id="layarKunci" class="kunci-overlay">
+
+    <div class="kunci-box">
+
+        <div class="kunci-logo">🔐</div>
+
+        <div class="kunci-judul" id="kunciJudul">Masukkan PIN</div>
+
+        <div class="kunci-sub" id="kunciSub">Catatan Produksi</div>
+
+        <div id="panelPin">
+
+            <div class="pin-dots" id="pinDots"></div>
+
+            <div class="kunci-error" id="kunciError"></div>
+
+            <div class="keypad">
+
+                <button onclick="tekanAngka('1')">1</button>
+                <button onclick="tekanAngka('2')">2</button>
+                <button onclick="tekanAngka('3')">3</button>
+                <button onclick="tekanAngka('4')">4</button>
+                <button onclick="tekanAngka('5')">5</button>
+                <button onclick="tekanAngka('6')">6</button>
+                <button onclick="tekanAngka('7')">7</button>
+                <button onclick="tekanAngka('8')">8</button>
+                <button onclick="tekanAngka('9')">9</button>
+
+                <button
+                    id="btnBiometrikKunci"
+                    class="kecil kosong"
+                    onclick="loginBiometrik()">👆</button>
+
+                <button onclick="tekanAngka('0')">0</button>
+
+                <button
+                    class="kecil"
+                    onclick="hapusAngka()">⌫</button>
+
+            </div>
+
+            <div class="kunci-links">
+
+                <button
+                    id="btnLupaPin"
+                    onclick="lupaPin()">Lupa PIN?</button>
+
+                <button
+                    id="btnBatalKunci"
+                    style="display:none"
+                    onclick="batalKunci()">Batal</button>
+
+            </div>
+
+        </div>
+
+        <div id="panelBio" class="bio-panel" style="display:none">
+
+            <div class="bio-ikon">👆</div>
+
+            <button
+                class="btn-light"
+                onclick="aktifkanBiometrikAwal()">Aktifkan Sekarang</button>
+
+            <button
+                class="btn-ghost"
+                onclick="lewatiBiometrik()">Nanti Saja</button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   DATA
+===================================================== */
+
+let daftarPembukuan =
+    JSON.parse(localStorage.getItem("daftarPembukuan")) || [];
+
+let pembukuanAktif =
+    localStorage.getItem("pembukuanAktif") || "";
+
+let semuaDataProduksi =
+    JSON.parse(localStorage.getItem("semuaDataProduksi")) || {};
+
+let daftarKategoriCatatan =
+    JSON.parse(localStorage.getItem("daftarKategoriCatatan")) || [];
+
+let daftarKategoriSatuan =
+    JSON.parse(localStorage.getItem("daftarKategoriSatuan")) || [];
+
+let daftarKategoriKandang =
+    JSON.parse(localStorage.getItem("daftarKategoriKandang")) || [];
+
+/* Kategori tersimpan terpisah untuk setiap pembukuan */
+let kategoriPerPembukuan =
+    JSON.parse(localStorage.getItem("kategoriPerPembukuan")) || {};
+
+let indexEditPembukuan = -1;
+let indexEditKategoriCatatan = -1;
+let indexEditKategoriSatuan = -1;
+let indexEditKategoriKandang = -1;
+let indexEditProduksi = -1;
+
+let aksiHapus = null;
+
+
+/* =====================================================
+   DATA AWAL
+===================================================== */
+
+function siapkanDataAwal(){
+
+    if(daftarPembukuan.length === 0){
+
+        daftarPembukuan = [
+            "Pembukuan Utama"
+        ];
+
+        simpanPembukuanStorage();
+    }
+
+    if(
+        !pembukuanAktif ||
+        !daftarPembukuan.includes(pembukuanAktif)
+    ){
+
+        pembukuanAktif =
+            daftarPembukuan[0];
+
+        localStorage.setItem(
+            "pembukuanAktif",
+            pembukuanAktif
+        );
+    }
+
+    if(
+        !semuaDataProduksi[pembukuanAktif]
+    ){
+
+        semuaDataProduksi[pembukuanAktif] = [];
+
+        simpanDataProduksi();
+    }
+
+    /* Kategori per pembukuan.
+       Kategori lama (sebelum fitur ini) disalin ke setiap pembukuan. */
+
+    const awalCatatan =
+        daftarKategoriCatatan.length > 0
+        ? [...daftarKategoriCatatan]
+        : ["Besar","Sedang","Kecil"];
+
+    const awalSatuan =
+        daftarKategoriSatuan.length > 0
+        ? [...daftarKategoriSatuan]
+        : ["Butir","Kg","Pcs","Liter","Unit"];
+
+    const awalKandang =
+        daftarKategoriKandang.length > 0
+        ? [...daftarKategoriKandang]
+        : ["Kandang A","Kandang B"];
+
+    daftarPembukuan.forEach(nama => {
+
+        if(!kategoriPerPembukuan[nama]){
+
+            kategoriPerPembukuan[nama] = {
+                catatan:[...awalCatatan],
+                satuan:[...awalSatuan],
+                kandang:[...awalKandang]
+            };
+        }
+    });
+
+    simpanKategoriPerPembukuan();
+
+    muatKategoriAktif();
+}
+
+
+/* =====================================================
+   STORAGE
+===================================================== */
+
+function simpanPembukuanStorage(){
+
+    localStorage.setItem(
+        "daftarPembukuan",
+        JSON.stringify(daftarPembukuan)
+    );
+}
+
+function simpanKategoriPerPembukuan(){
+
+    localStorage.setItem(
+        "kategoriPerPembukuan",
+        JSON.stringify(kategoriPerPembukuan)
+    );
+}
+
+function muatKategoriAktif(){
+
+    if(!kategoriPerPembukuan[pembukuanAktif]){
+
+        kategoriPerPembukuan[pembukuanAktif] = {
+            catatan:[...daftarKategoriCatatan],
+            satuan:[...daftarKategoriSatuan],
+            kandang:[...daftarKategoriKandang]
+        };
+
+        simpanKategoriPerPembukuan();
+    }
+
+    const k =
+        kategoriPerPembukuan[pembukuanAktif];
+
+    daftarKategoriCatatan = k.catatan;
+    daftarKategoriSatuan = k.satuan;
+    daftarKategoriKandang = k.kandang;
+}
+
+function simpanKategoriCatatanStorage(){
+
+    kategoriPerPembukuan[
+        pembukuanAktif
+    ].catatan = daftarKategoriCatatan;
+
+    simpanKategoriPerPembukuan();
+}
+
+function simpanKategoriSatuanStorage(){
+
+    kategoriPerPembukuan[
+        pembukuanAktif
+    ].satuan = daftarKategoriSatuan;
+
+    simpanKategoriPerPembukuan();
+}
+
+function simpanKategoriKandangStorage(){
+
+    kategoriPerPembukuan[
+        pembukuanAktif
+    ].kandang = daftarKategoriKandang;
+
+    simpanKategoriPerPembukuan();
+}
+
+function simpanDataProduksi(){
+
+    localStorage.setItem(
+        "semuaDataProduksi",
+        JSON.stringify(semuaDataProduksi)
+    );
+}
+
+
+/* =====================================================
+   HELPER
+===================================================== */
+
+function dataAktif(){
+
+    if(!semuaDataProduksi[pembukuanAktif]){
+
+        semuaDataProduksi[pembukuanAktif] = [];
+    }
+
+    return semuaDataProduksi[pembukuanAktif];
+}
+
+function formatTanggal(tanggal){
+
+    if(!tanggal) return "-";
+
+    const bagian =
+        tanggal.split("-");
+
+    if(bagian.length !== 3){
+        return tanggal;
+    }
+
+    return `${bagian[2]}/${bagian[1]}/${bagian[0]}`;
+}
+
+function escapeHTML(teks){
+
+    return String(teks ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+function formatAngka(angka){
+
+    return new Intl.NumberFormat(
+        "id-ID",
+        {
+            maximumFractionDigits:2
+        }
+    ).format(angka);
+}
+
+
+/* =====================================================
+   POPUP PESAN
+===================================================== */
+
+function tampilkanPesan(
+    pesan,
+    judul="Periksa Data",
+    ikon="⚠️"
+){
+
+    document.getElementById(
+        "judulModalPesan"
+    ).textContent = judul;
+
+    document.getElementById(
+        "isiModalPesan"
+    ).innerHTML = pesan;
+
+    document.getElementById(
+        "ikonModalPesan"
+    ).textContent = ikon;
+
+    document
+        .getElementById("modalPesan")
+        .classList.add("show");
+}
+
+function tampilkanPeringatan(
+    pesan,
+    judul="Data Belum Lengkap"
+){
+
+    tampilkanPesan(
+        pesan,
+        judul,
+        "⚠️"
+    );
+}
+
+function tutupModalPesan(){
+
+    document
+        .getElementById("modalPesan")
+        .classList.remove("show");
+}
+
+
+
+/* =====================================================
+   MODAL TAMBAH PRODUKSI
+===================================================== */
+
+function bukaModalTambahProduksi(){
+
+    if(
+        !document.getElementById("inputTanggal").value ||
+        !document.getElementById("inputJam").value
+    ){
+        setTanggalJamSekarang();
+    }
+
+    document
+        .getElementById("modalTambahProduksi")
+        .classList.add("show");
+}
+
+function tutupModalTambahProduksi(){
+
+    document
+        .getElementById("modalTambahProduksi")
+        .classList.remove("show");
+}
+
+function aturTombolTambah(tampil){
+
+    document
+        .getElementById("btnFabTambah")
+        ?.classList.toggle("sembunyi", !tampil);
+}
+
+/* =====================================================
+   NAVIGASI
+===================================================== */
+
+function bukaHalaman(halaman){
+
+    aturTombolTambah(
+        halaman === "dashboard" ||
+        halaman === "laporan"
+    );
+
+    document
+        .querySelectorAll(".halaman")
+        .forEach(
+            el => el.classList.remove("aktif")
+        );
+
+    const nama =
+        "halaman" +
+        halaman.charAt(0).toUpperCase() +
+        halaman.slice(1);
+
+    document
+        .getElementById(nama)
+        ?.classList.add("aktif");
+
+    document
+        .querySelectorAll(".nav-btn")
+        .forEach(
+            el => el.classList.remove("aktif")
+        );
+
+    if(halaman === "dashboard"){
+
+        document
+            .getElementById("navDashboard")
+            .classList.add("aktif");
+
+        tampilkanCatatan();
+        updateStatistik();
+    }
+
+    if(halaman === "laporan"){
+
+        document
+            .getElementById("navLaporan")
+            .classList.add("aktif");
+
+        tampilkanLaporan();
+    }
+
+    if(halaman === "pengaturan"){
+
+        document
+            .getElementById("navPengaturan")
+            .classList.add("aktif");
+    }
+}
+
+function kembaliKePengaturan(){
+
+    bukaHalaman("pengaturan");
+}
+
+function tampilkanHalamanInternal(id){
+
+    aturTombolTambah(false);
+
+    document
+        .querySelectorAll(".halaman")
+        .forEach(
+            el => el.classList.remove("aktif")
+        );
+
+    document
+        .getElementById(id)
+        .classList.add("aktif");
+}
+
+
+/* =====================================================
+   PEMBUKUAN
+===================================================== */
+
+function tampilkanPembukuan(){
+
+    const select =
+        document.getElementById(
+            "selectPembukuan"
+        );
+
+    select.innerHTML = "";
+
+    daftarPembukuan.forEach(nama => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = nama;
+        option.textContent = nama;
+
+        if(nama === pembukuanAktif){
+            option.selected = true;
+        }
+
+        select.appendChild(option);
+    });
+
+    document.getElementById(
+        "namaPembukuanAktif"
+    ).textContent = pembukuanAktif;
+
+    document.getElementById(
+        "namaPembukuanLaporan"
+    ).textContent = pembukuanAktif;
+
+    tampilkanDaftarPembukuan();
+}
+
+function pilihPembukuan(nama){
+
+    if(!nama) return;
+
+    pembukuanAktif = nama;
+
+    localStorage.setItem(
+        "pembukuanAktif",
+        pembukuanAktif
+    );
+
+    if(
+        !semuaDataProduksi[pembukuanAktif]
+    ){
+
+        semuaDataProduksi[pembukuanAktif] = [];
+
+        simpanDataProduksi();
+    }
+
+    indexEditProduksi = -1;
+
+    muatKategoriAktif();
+
+    tampilkanKategoriCatatanDropdown();
+    tampilkanKategoriSatuanDropdown();
+    tampilkanKategoriKandangDropdown();
+
+    tampilkanPembukuan();
+    tampilkanCatatan();
+    updateStatistik();
+    tampilkanLaporan();
+}
+
+function bukaDaftarPembukuan(){
+
+    tampilkanHalamanInternal(
+        "halamanDaftarPembukuan"
+    );
+
+    tampilkanDaftarPembukuan();
+}
+
+function tampilkanDaftarPembukuan(){
+
+    const container =
+        document.getElementById(
+            "daftarPembukuanContainer"
+        );
+
+    if(!container) return;
+
+    container.innerHTML = "";
+
+    daftarPembukuan.forEach(
+        (nama,index) => {
+
+        const aktif =
+            nama === pembukuanAktif;
+
+        const div =
+            document.createElement("div");
+
+        div.className = "setting-item";
+
+        div.innerHTML = `
+
+            <div class="setting-item-icon">
+                📒
+            </div>
+
+            <div
+                class="setting-item-info"
+                style="cursor:pointer">
+
+                <div class="setting-item-name">
+                    ${escapeHTML(nama)}
+                </div>
+
+                <div class="setting-item-status">
+                    ${
+                        aktif
+                        ? "✓ Sedang digunakan"
+                        : "Klik untuk membuka"
+                    }
+                </div>
+
+            </div>
+
+            <div class="setting-actions">
+
+                <button class="btn-icon">
+                    ✏️
+                </button>
+
+                <button class="btn-icon">
+                    🗑️
+                </button>
+
+            </div>
+
+        `;
+
+        div.querySelector(
+            ".setting-item-info"
+        ).addEventListener(
+            "click",
+            () => pilihPembukuan(nama)
+        );
+
+        const tombol =
+            div.querySelectorAll(".btn-icon");
+
+        tombol[0].addEventListener(
+            "click",
+            event => {
+                event.stopPropagation();
+                editPembukuan(index);
+            }
+        );
+
+        tombol[1].addEventListener(
+            "click",
+            event => {
+                event.stopPropagation();
+                mintaHapusPembukuan(index);
+            }
+        );
+
+        container.appendChild(div);
+    });
+}
+
+
+/* =====================================================
+   MODAL PEMBUKUAN
+===================================================== */
+
+function bukaModalPembukuan(index=-1){
+
+    indexEditPembukuan = index;
+
+    const input =
+        document.getElementById(
+            "namaPembukuan"
+        );
+
+    if(index === -1){
+
+        document.getElementById(
+            "judulModalPembukuan"
+        ).textContent =
+            "📚 Tambah Pembukuan";
+
+        input.value = "";
+
+    }else{
+
+        document.getElementById(
+            "judulModalPembukuan"
+        ).textContent =
+            "✏️ Edit Pembukuan";
+
+        input.value =
+            daftarPembukuan[index];
+    }
+
+    document
+        .getElementById("modalPembukuan")
+        .classList.add("show");
+
+    setTimeout(
+        () => input.focus(),
+        150
+    );
+}
+
+function editPembukuan(index){
+
+    bukaModalPembukuan(index);
+}
+
+function simpanPembukuan(){
+
+    const input =
+        document.getElementById(
+            "namaPembukuan"
+        );
+
+    const nama =
+        input.value.trim();
+
+    if(!nama){
+
+        tampilkanPeringatan(
+            "Silakan isi nama pembukuan terlebih dahulu.",
+            "Nama Belum Diisi"
+        );
+
+        return;
+    }
+
+    if(indexEditPembukuan === -1){
+
+        if(daftarPembukuan.includes(nama)){
+
+            tampilkanPeringatan(
+                "Nama pembukuan tersebut sudah digunakan.",
+                "Data Sudah Ada"
+            );
+
+            return;
+        }
+
+        daftarPembukuan.push(nama);
+
+        semuaDataProduksi[nama] = [];
+
+        /* Pembukuan baru memakai salinan kategori pembukuan yang sedang aktif */
+
+        kategoriPerPembukuan[nama] = {
+            catatan:[...daftarKategoriCatatan],
+            satuan:[...daftarKategoriSatuan],
+            kandang:[...daftarKategoriKandang]
+        };
+
+    }else{
+
+        const namaLama =
+            daftarPembukuan[
+                indexEditPembukuan
+            ];
+
+        if(
+            nama !== namaLama &&
+            daftarPembukuan.includes(nama)
+        ){
+
+            tampilkanPeringatan(
+                "Nama pembukuan tersebut sudah digunakan.",
+                "Data Sudah Ada"
+            );
+
+            return;
+        }
+
+        daftarPembukuan[
+            indexEditPembukuan
+        ] = nama;
+
+        if(
+            semuaDataProduksi[namaLama] &&
+            nama !== namaLama
+        ){
+
+            semuaDataProduksi[nama] =
+                semuaDataProduksi[namaLama];
+
+            delete semuaDataProduksi[namaLama];
+
+            if(kategoriPerPembukuan[namaLama]){
+
+                kategoriPerPembukuan[nama] =
+                    kategoriPerPembukuan[namaLama];
+
+                delete kategoriPerPembukuan[namaLama];
+            }
+
+            if(
+                pembukuanAktif === namaLama
+            ){
+
+                pembukuanAktif = nama;
+
+                localStorage.setItem(
+                    "pembukuanAktif",
+                    nama
+                );
+            }
+        }
+    }
+
+    simpanPembukuanStorage();
+    simpanDataProduksi();
+    simpanKategoriPerPembukuan();
+
+    tutupModal("modalPembukuan");
+
+    tampilkanPembukuan();
+    tampilkanCatatan();
+    updateStatistik();
+    tampilkanLaporan();
+}
+
+
+/* =====================================================
+   POPUP HAPUS
+===================================================== */
+
+function bukaPopupHapus(pesan,callback){
+
+    aksiHapus = callback;
+
+    document.getElementById(
+        "pesanKonfirmasiHapus"
+    ).innerHTML = pesan;
+
+    document
+        .getElementById(
+            "modalKonfirmasiHapus"
+        )
+        .classList.add("show");
+}
+
+function jalankanHapus(){
+
+    if(typeof aksiHapus === "function"){
+        aksiHapus();
+    }
+
+    aksiHapus = null;
+
+    tutupModal(
+        "modalKonfirmasiHapus"
+    );
+}
+
+
+/* =====================================================
+   HAPUS PRODUKSI
+===================================================== */
+
+function mintaHapusCatatan(index){
+
+    const data = dataAktif();
+
+    if(!data[index]) return;
+
+    const item = data[index];
+
+    const kategori =
+        item.kategori ||
+        item.catatan ||
+        "Tanpa kategori";
+
+    bukaPopupHapus(
+
+        `
+        Apakah Anda yakin ingin menghapus
+        catatan <span class="hapus-highlight">
+        ${escapeHTML(kategori)}
+        </span>
+        dari
+        <span class="hapus-highlight">
+        ${escapeHTML(item.kandang || "Tanpa kandang")}
+        </span>
+        dengan jumlah
+        <span class="hapus-highlight">
+        ${escapeHTML(item.jumlah)}
+        ${escapeHTML(item.satuan || "")}
+        </span>?
+        <br><br>
+        Data yang dihapus tidak dapat dikembalikan.
+        `,
+
+        function(){
+
+            data.splice(index,1);
+
+            simpanDataProduksi();
+
+            tampilkanCatatan();
+            updateStatistik();
+            tampilkanLaporan();
+        }
+    );
+}
+
+function mintaHapusSemua(){
+
+    const data = dataAktif();
+
+    if(data.length === 0){
+        return;
+    }
+
+    bukaPopupHapus(
+
+        `
+        Anda akan menghapus
+        <span class="hapus-highlight">
+        seluruh ${data.length} catatan produksi
+        </span>
+        pada pembukuan ini.
+        <br><br>
+        Semua data yang dihapus tidak dapat dikembalikan.
+        `,
+
+        function(){
+
+            semuaDataProduksi[
+                pembukuanAktif
+            ] = [];
+
+            simpanDataProduksi();
+
+            tampilkanCatatan();
+            updateStatistik();
+            tampilkanLaporan();
+        }
+    );
+}
+
+
+/* =====================================================
+   HAPUS PEMBUKUAN
+===================================================== */
+
+function mintaHapusPembukuan(index){
+
+    if(daftarPembukuan.length <= 1){
+
+        tampilkanPesan(
+            "Minimal harus ada satu pembukuan.",
+            "Tidak Bisa Dihapus",
+            "🔒"
+        );
+
+        return;
+    }
+
+    const nama =
+        daftarPembukuan[index];
+
+    bukaPopupHapus(
+
+        `
+        Hapus pembukuan
+        <span class="hapus-highlight">
+        "${escapeHTML(nama)}"
+        </span>?
+        <br><br>
+        Seluruh catatan produksi di dalam
+        pembukuan ini juga akan dihapus.
+        `,
+
+        function(){
+
+            delete semuaDataProduksi[nama];
+            delete kategoriPerPembukuan[nama];
+
+            daftarPembukuan.splice(
+                index,
+                1
+            );
+
+            if(
+                pembukuanAktif === nama
+            ){
+
+                pembukuanAktif =
+                    daftarPembukuan[0];
+
+                localStorage.setItem(
+                    "pembukuanAktif",
+                    pembukuanAktif
+                );
+            }
+
+            simpanPembukuanStorage();
+            simpanDataProduksi();
+
+            muatKategoriAktif();
+            simpanKategoriPerPembukuan();
+
+            tampilkanKategoriCatatanDropdown();
+            tampilkanKategoriSatuanDropdown();
+            tampilkanKategoriKandangDropdown();
+
+            tampilkanPembukuan();
+            tampilkanCatatan();
+            updateStatistik();
+            tampilkanDaftarPembukuan();
+        }
+    );
+}
+
+
+/* =====================================================
+   KATEGORI CATATAN
+===================================================== */
+
+function tampilkanKategoriCatatanDropdown(){
+
+    const select =
+        document.getElementById(
+            "inputCatatan"
+        );
+
+    const editSelect =
+        document.getElementById(
+            "editCatatan"
+        );
+
+    [select,editSelect].forEach(
+        el => {
+
+        if(!el) return;
+
+        const nilaiLama = el.value;
+
+        el.innerHTML =
+            '<option value="">Pilih catatan</option>';
+
+        daftarKategoriCatatan.forEach(
+            nama => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value = nama;
+            option.textContent = nama;
+
+            el.appendChild(option);
+        });
+
+        if(
+            daftarKategoriCatatan.includes(
+                nilaiLama
+            )
+        ){
+
+            el.value = nilaiLama;
+        }
+    });
+}
+
+function bukaDaftarKategoriCatatan(){
+
+    tampilkanHalamanInternal(
+        "halamanDaftarKategoriCatatan"
+    );
+
+    tampilkanDaftarKategoriCatatan();
+}
+
+function tampilkanDaftarKategoriCatatan(){
+
+    const container =
+        document.getElementById(
+            "daftarKategoriCatatanContainer"
+        );
+
+    if(!container) return;
+
+    container.innerHTML = "";
+
+    daftarKategoriCatatan.forEach(
+        (nama,index) => {
+
+        const div =
+            document.createElement("div");
+
+        div.className = "setting-item";
+
+        div.innerHTML = `
+
+            <div class="setting-item-icon">
+                🏷️
+            </div>
+
+            <div class="setting-item-info">
+
+                <div class="setting-item-name">
+                    ${escapeHTML(nama)}
+                </div>
+
+                <div class="setting-item-status">
+                    Digunakan pada form produksi
+                </div>
+
+            </div>
+
+            <div class="setting-actions">
+
+                <button class="btn-icon">
+                    ✏️
+                </button>
+
+                <button class="btn-icon">
+                    🗑️
+                </button>
+
+            </div>
+
+        `;
+
+        const tombol =
+            div.querySelectorAll(".btn-icon");
+
+        tombol[0].addEventListener(
+            "click",
+            () => editKategoriCatatan(index)
+        );
+
+        tombol[1].addEventListener(
+            "click",
+            () => mintaHapusKategoriCatatan(index)
+        );
+
+        container.appendChild(div);
+    });
+}
+
+function bukaModalKategoriCatatan(index=-1){
+
+    indexEditKategoriCatatan = index;
+
+    const input =
+        document.getElementById(
+            "namaKategoriCatatan"
+        );
+
+    if(index === -1){
+
+        document.getElementById(
+            "judulModalKategoriCatatan"
+        ).textContent =
+            "🏷️ Tambah Kategori";
+
+        input.value = "";
+
+    }else{
+
+        document.getElementById(
+            "judulModalKategoriCatatan"
+        ).textContent =
+            "✏️ Edit Kategori";
+
+        input.value =
+            daftarKategoriCatatan[index];
+    }
+
+    document
+        .getElementById(
+            "modalKategoriCatatan"
+        )
+        .classList.add("show");
+
+    setTimeout(
+        () => input.focus(),
+        150
+    );
+}
+
+function editKategoriCatatan(index){
+
+    bukaModalKategoriCatatan(index);
+}
+
+function simpanKategoriCatatan(){
+
+    const input =
+        document.getElementById(
+            "namaKategoriCatatan"
+        );
+
+    const nama =
+        input.value.trim();
+
+    if(!nama){
+
+        tampilkanPeringatan(
+            "Silakan isi nama kategori terlebih dahulu.",
+            "Nama Belum Diisi"
+        );
+
+        return;
+    }
+
+    if(indexEditKategoriCatatan === -1){
+
+        if(
+            daftarKategoriCatatan.includes(nama)
+        ){
+
+            tampilkanPeringatan(
+                "Kategori tersebut sudah ada.",
+                "Data Sudah Ada"
+            );
+
+            return;
+        }
+
+        daftarKategoriCatatan.push(nama);
+
+    }else{
+
+        const namaLama =
+            daftarKategoriCatatan[
+                indexEditKategoriCatatan
+            ];
+
+        if(
+            nama !== namaLama &&
+            daftarKategoriCatatan.includes(nama)
+        ){
+
+            tampilkanPeringatan(
+                "Kategori tersebut sudah ada.",
+                "Data Sudah Ada"
+            );
+
+            return;
+        }
+
+        daftarKategoriCatatan[
+            indexEditKategoriCatatan
+        ] = nama;
+    }
+
+    simpanKategoriCatatanStorage();
+
+    tutupModal(
+        "modalKategoriCatatan"
+    );
+
+    tampilkanKategoriCatatanDropdown();
+    tampilkanDaftarKategoriCatatan();
+}
+
+function mintaHapusKategoriCatatan(index){
+
+    if(daftarKategoriCatatan.length <= 1){
+
+        tampilkanPesan(
+            "Minimal harus ada satu kategori.",
+            "Tidak Bisa Dihapus",
+            "🔒"
+        );
+
+        return;
+    }
+
+    const nama =
+        daftarKategoriCatatan[index];
+
+    bukaPopupHapus(
+
+        `
+        Hapus kategori
+        <span class="hapus-highlight">
+        "${escapeHTML(nama)}"
+        </span>?
+        <br><br>
+        Kategori ini tidak akan muncul lagi
+        pada pilihan catatan baru.
+        `,
+
+        function(){
+
+            daftarKategoriCatatan.splice(
+                index,
+                1
+            );
+
+            simpanKategoriCatatanStorage();
+
+            tampilkanKategoriCatatanDropdown();
+            tampilkanDaftarKategoriCatatan();
+        }
+    );
+}
+
+
+/* =====================================================
+   KATEGORI SATUAN
+===================================================== */
+
+function tampilkanKategoriSatuanDropdown(){
+
+    const select =
+        document.getElementById(
+            "satuan"
+        );
+
+    const editSelect =
+        document.getElementById(
+            "editSatuan"
+        );
+
+    [select,editSelect].forEach(
+        el => {
+
+        if(!el) return;
+
+        const nilaiLama = el.value;
+
+        el.innerHTML =
+            '<option value="">Pilih satuan</option>';
+
+        daftarKategoriSatuan.forEach(
+            nama => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value = nama;
+            option.textContent = nama;
+
+            el.appendChild(option);
+        });
+
+        if(
+            daftarKategoriSatuan.includes(
+                nilaiLama
+            )
+        ){
+
+            el.value = nilaiLama;
+        }
+    });
+}
+
+function bukaDaftarKategoriSatuan(){
+
+    tampilkanHalamanInternal(
+        "halamanDaftarKategoriSatuan"
+    );
+
+    tampilkanDaftarKategoriSatuan();
+}
+
+function tampilkanDaftarKategoriSatuan(){
+
+    const container =
+        document.getElementById(
+            "daftarKategoriSatuanContainer"
+        );
+
+    if(!container) return;
+
+    container.innerHTML = "";
+
+    daftarKategoriSatuan.forEach(
+        (nama,index) => {
+
+        const div =
+            document.createElement("div");
+
+        div.className = "setting-item";
+
+        div.innerHTML = `
+
+            <div class="setting-item-icon">
+                📏
+            </div>
+
+            <div class="setting-item-info">
+
+                <div class="setting-item-name">
+                    ${escapeHTML(nama)}
+                </div>
+
+                <div class="setting-item-status">
+                    Digunakan pada produksi
+                </div>
+
+            </div>
+
+            <div class="setting-actions">
+
+                <button class="btn-icon">
+                    ✏️
+                </button>
+
+                <button class="btn-icon">
+                    🗑️
+                </button>
+
+            </div>
+
+        `;
+
+        const tombol =
+            div.querySelectorAll(".btn-icon");
+
+        tombol[0].addEventListener(
+            "click",
+            () => editKategoriSatuan(index)
+        );
+
+        tombol[1].addEventListener(
+            "click",
+            () => mintaHapusKategoriSatuan(index)
+        );
+
+        container.appendChild(div);
+    });
+}
+
+function bukaModalKategoriSatuan(index=-1){
+
+    indexEditKategoriSatuan = index;
+
+    const input =
+        document.getElementById(
+            "namaKategoriSatuan"
+        );
+
+    if(index === -1){
+
+        document.getElementById(
+            "judulModalKategoriSatuan"
+        ).textContent =
+            "📏 Tambah Satuan";
+
+        input.value = "";
+
+    }else{
+
+        document.getElementById(
+            "judulModalKategoriSatuan"
+        ).textContent =
+            "✏️ Edit Satuan";
+
+        input.value =
+            daftarKategoriSatuan[index];
+    }
+
+    document
+        .getElementById(
+            "modalKategoriSatuan"
+        )
+        .classList.add("show");
+
+    setTimeout(
+        () => input.focus(),
+        150
+    );
+}
+
+function editKategoriSatuan(index){
+
+    bukaModalKategoriSatuan(index);
+}
+
+function simpanKategoriSatuan(){
+
+    const input =
+        document.getElementById(
+            "namaKategoriSatuan"
+        );
+
+    const nama =
+        input.value.trim();
+
+    if(!nama){
+
+        tampilkanPeringatan(
+            "Silakan isi nama satuan terlebih dahulu.",
+            "Nama Belum Diisi"
+        );
+
+        return;
+    }
+
+    if(indexEditKategoriSatuan === -1){
+
+        if(
+            daftarKategoriSatuan.includes(nama)
+        ){
+
+            tampilkanPeringatan(
+                "Satuan tersebut sudah ada.",
+                "Data Sudah Ada"
+            );
+
+            return;
+        }
+
+        daftarKategoriSatuan.push(nama);
+
+    }else{
+
+        const namaLama =
+            daftarKategoriSatuan[
+                indexEditKategoriSatuan
+            ];
+
+        if(
+            nama !== namaLama &&
+            daftarKategoriSatuan.includes(nama)
+        ){
+
+            tampilkanPeringatan(
+                "Satuan tersebut sudah ada.",
+                "Data Sudah Ada"
+            );
+
+            return;
+        }
+
+        daftarKategoriSatuan[
+            indexEditKategoriSatuan
+        ] = nama;
+    }
+
+    simpanKategoriSatuanStorage();
+
+    tutupModal(
+        "modalKategoriSatuan"
+    );
+
+    tampilkanKategoriSatuanDropdown();
+    tampilkanDaftarKategoriSatuan();
+}
+
+function mintaHapusKategoriSatuan(index){
+
+    if(daftarKategoriSatuan.length <= 1){
+
+        tampilkanPesan(
+            "Minimal harus ada satu satuan.",
+            "Tidak Bisa Dihapus",
+            "🔒"
+        );
+
+        return;
+    }
+
+    const nama =
+        daftarKategoriSatuan[index];
+
+    bukaPopupHapus(
+
+        `
+        Hapus satuan
+        <span class="hapus-highlight">
+        "${escapeHTML(nama)}"
+        </span>?
+        <br><br>
+        Satuan ini tidak akan muncul lagi
+        pada pilihan produksi baru.
+        `,
+
+        function(){
+
+            daftarKategoriSatuan.splice(
+                index,
+                1
+            );
+
+            simpanKategoriSatuanStorage();
+
+            tampilkanKategoriSatuanDropdown();
+            tampilkanDaftarKategoriSatuan();
+        }
+    );
+}
+
+
+/* =====================================================
+   KATEGORI KANDANG / SEKAT
+===================================================== */
+
+function tampilkanKategoriKandangDropdown(){
+
+    const selects = [
+
+        document.getElementById(
+            "inputKandang"
+        ),
+
+        document.getElementById(
+            "editKandang"
+        )
+
+    ];
+
+    selects.forEach(select => {
+
+        if(!select) return;
+
+        const nilaiLama =
+            select.value;
+
+        select.innerHTML =
+            `<option value="">
+                Pilih kandang / sekat
+             </option>`;
+
+        daftarKategoriKandang.forEach(
+            kandang => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value = kandang;
+            option.textContent = kandang;
+
+            select.appendChild(option);
+        });
+
+        if(
+            daftarKategoriKandang.includes(
+                nilaiLama
+            )
+        ){
+
+            select.value = nilaiLama;
+        }
+    });
+}
+
+function bukaDaftarKategoriKandang(){
+
+    tampilkanHalamanInternal(
+        "halamanDaftarKategoriKandang"
+    );
+
+    tampilkanDaftarKategoriKandang();
+}
+
+function tampilkanDaftarKategoriKandang(){
+
+    const container =
+        document.getElementById(
+            "daftarKategoriKandangContainer"
+        );
+
+    if(!container) return;
+
+    container.innerHTML = "";
+
+    daftarKategoriKandang.forEach(
+        (nama,index) => {
+
+        const div =
+            document.createElement("div");
+
+        div.className = "setting-item";
+
+        div.innerHTML = `
+
+            <div class="setting-item-icon">
+                🏠
+            </div>
+
+            <div class="setting-item-info">
+
+                <div class="setting-item-name">
+                    ${escapeHTML(nama)}
+                </div>
+
+                <div class="setting-item-status">
+                    Digunakan pada form produksi
+                </div>
+
+            </div>
+
+            <div class="setting-actions">
+
+                <button class="btn-icon">
+                    ✏️
+                </button>
+
+                <button class="btn-icon">
+                    🗑️
+                </button>
+
+            </div>
+
+        `;
+
+        const tombol =
+            div.querySelectorAll(".btn-icon");
+
+        tombol[0].addEventListener(
+            "click",
+            () => editKategoriKandang(index)
+        );
+
+        tombol[1].addEventListener(
+            "click",
+            () => mintaHapusKategoriKandang(index)
+        );
+
+        container.appendChild(div);
+    });
+}
+
+function bukaModalKategoriKandang(index=-1){
+
+    indexEditKategoriKandang = index;
+
+    const input =
+        document.getElementById(
+            "namaKategoriKandang"
+        );
+
+    if(index === -1){
+
+        document.getElementById(
+            "judulModalKategoriKandang"
+        ).textContent =
+            "🏠 Tambah Kandang / Sekat";
+
+        input.value = "";
+
+    }else{
+
+        document.getElementById(
+            "judulModalKategoriKandang"
+        ).textContent =
+            "✏️ Edit Kandang / Sekat";
+
+        input.value =
+            daftarKategoriKandang[index];
+    }
+
+    document
+        .getElementById(
+            "modalKategoriKandang"
+        )
+        .classList.add("show");
+
+    setTimeout(
+        () => input.focus(),
+        150
+    );
+}
+
+function editKategoriKandang(index){
+
+    bukaModalKategoriKandang(index);
+}
+
+function simpanKategoriKandang(){
+
+    const input =
+        document.getElementById(
+            "namaKategoriKandang"
+        );
+
+    const nama =
+        input.value.trim();
+
+    if(!nama){
+
+        tampilkanPeringatan(
+            "Silakan isi nama kandang / sekat terlebih dahulu.",
+            "Nama Belum Diisi"
+        );
+
+        return;
+    }
+
+    if(indexEditKategoriKandang === -1){
+
+        if(
+            daftarKategoriKandang.includes(nama)
+        ){
+
+            tampilkanPeringatan(
+                "Kandang / sekat tersebut sudah ada.",
+                "Data Sudah Ada"
+            );
+
+            return;
+        }
+
+        daftarKategoriKandang.push(nama);
+
+    }else{
+
+        const namaLama =
+            daftarKategoriKandang[
+                indexEditKategoriKandang
+            ];
+
+        if(
+            nama !== namaLama &&
+            daftarKategoriKandang.includes(nama)
+        ){
+
+            tampilkanPeringatan(
+                "Kandang / sekat tersebut sudah ada.",
+                "Data Sudah Ada"
+            );
+
+            return;
+        }
+
+        daftarKategoriKandang[
+            indexEditKategoriKandang
+        ] = nama;
+
+        /* Update nama kandang pada data produksi lama (pembukuan aktif saja) */
+
+        dataAktif().forEach(
+            data => {
+
+            if(
+                data.kandang === namaLama
+            ){
+
+                data.kandang = nama;
+            }
+        });
+    }
+
+    simpanKategoriKandangStorage();
+    simpanDataProduksi();
+
+    tutupModal(
+        "modalKategoriKandang"
+    );
+
+    tampilkanKategoriKandangDropdown();
+    tampilkanDaftarKategoriKandang();
+
+    tampilkanCatatan();
+    updateStatistik();
+    tampilkanLaporan();
+}
+
+function mintaHapusKategoriKandang(index){
+
+    if(daftarKategoriKandang.length <= 1){
+
+        tampilkanPesan(
+            "Minimal harus ada satu kandang / sekat.",
+            "Tidak Bisa Dihapus",
+            "🔒"
+        );
+
+        return;
+    }
+
+    const nama =
+        daftarKategoriKandang[index];
+
+    bukaPopupHapus(
+
+        `
+        Hapus kandang / sekat
+        <span class="hapus-highlight">
+        "${escapeHTML(nama)}"
+        </span>?
+        <br><br>
+        Kandang / sekat ini tidak akan muncul
+        pada pilihan produksi baru.
+        `,
+
+        function(){
+
+            daftarKategoriKandang.splice(
+                index,
+                1
+            );
+
+            simpanKategoriKandangStorage();
+
+            tampilkanKategoriKandangDropdown();
+            tampilkanDaftarKategoriKandang();
+            updateStatistik();
+        }
+    );
+}
+
+
+/* =====================================================
+   TAMBAH PRODUKSI
+===================================================== */
+
+function tambahCatatan(){
+
+    const kategori =
+        document.getElementById(
+            "inputCatatan"
+        ).value;
+
+    const kandang =
+        document.getElementById(
+            "inputKandang"
+        ).value;
+
+    const jumlah =
+        document.getElementById(
+            "jumlahProduksi"
+        ).value;
+
+    const satuan =
+        document.getElementById(
+            "satuan"
+        ).value;
+
+    const tanggal =
+        document.getElementById(
+            "inputTanggal"
+        ).value;
+
+    const jam =
+        document.getElementById(
+            "inputJam"
+        ).value;
+
+    if(!kategori){
+
+        tampilkanPeringatan(
+            "Silakan pilih catatan terlebih dahulu.",
+            "Catatan Belum Dipilih"
+        );
+
+        return;
+    }
+
+    if(!kandang){
+
+        tampilkanPeringatan(
+            "Silakan pilih kandang / sekat terlebih dahulu.",
+            "Kandang Belum Dipilih"
+        );
+
+        return;
+    }
+
+    if(
+        jumlah === "" ||
+        Number(jumlah) < 0
+    ){
+
+        tampilkanPeringatan(
+            "Silakan isi jumlah produksi terlebih dahulu.",
+            "Jumlah Belum Diisi"
+        );
+
+        return;
+    }
+
+    if(!satuan){
+
+        tampilkanPeringatan(
+            "Silakan pilih satuan terlebih dahulu.",
+            "Satuan Belum Dipilih"
+        );
+
+        return;
+    }
+
+    if(!tanggal || !jam){
+
+        tampilkanPeringatan(
+            "Silakan isi tanggal dan jam terlebih dahulu.",
+            "Tanggal & Jam Belum Diisi"
+        );
+
+        return;
+    }
+
+    const data = dataAktif();
+
+    data.push({
+
+        jumlah:Number(jumlah),
+
+        satuan:satuan,
+
+        catatan:kategori,
+
+        kategori:kategori,
+
+        kandang:kandang,
+
+        tanggal:tanggal,
+
+        jam:jam
+    });
+
+    simpanDataProduksi();
+
+    tampilkanCatatan();
+    updateStatistik();
+    tampilkanLaporan();
+
+    document.getElementById(
+        "inputCatatan"
+    ).value = "";
+
+    document.getElementById(
+        "inputKandang"
+    ).value = "";
+
+    document.getElementById(
+        "jumlahProduksi"
+    ).value = "";
+
+    document.getElementById(
+        "satuan"
+    ).value = "";
+
+    setTanggalJamSekarang();
+
+    tutupModalTambahProduksi();
+
+    tampilkanPesan(
+        "Data produksi berhasil disimpan.",
+        "Berhasil Disimpan",
+        "✅"
+    );
+}
+
+
+/* =====================================================
+   TAMPILKAN PRODUKSI
+===================================================== */
+
+function tampilkanCatatan(){
+
+    const container =
+        document.getElementById(
+            "daftarProduksi"
+        );
+
+    const data = dataAktif();
+
+    const kataKunci =
+        (document.getElementById("cariProduksi")?.value || "")
+        .trim()
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(Boolean);
+
+    container.innerHTML = "";
+
+    if(data.length === 0){
+
+        container.innerHTML = `
+            <div class="kosong">
+                Belum ada catatan produksi.
+            </div>
+        `;
+
+        return;
+    }
+
+    const dataUrut =
+        data
+        .map((item,index) => ({
+            item:item,
+            index:index
+        }))
+        .filter(({item}) => {
+
+            if(kataKunci.length === 0) return true;
+
+            const teks = [
+                item.tanggal,
+                formatTanggal(item.tanggal),
+                item.kandang,
+                item.jumlah
+            ]
+            .map(v => String(v ?? "").toLowerCase())
+            .join(" ");
+
+            return kataKunci.every(k => teks.includes(k));
+        })
+        .sort((a,b) => {
+
+            const tanggalA =
+                a.item.tanggal || "";
+
+            const tanggalB =
+                b.item.tanggal || "";
+
+            if(tanggalA !== tanggalB){
+
+                return tanggalB.localeCompare(
+                    tanggalA
+                );
+            }
+
+            const jamA =
+                a.item.jam || "00:00";
+
+            const jamB =
+                b.item.jam || "00:00";
+
+            return jamB.localeCompare(
+                jamA
+            );
+        });
+
+    if(dataUrut.length === 0){
+
+        container.innerHTML = `
+            <div class="kosong">
+                Data tidak ditemukan.
+            </div>
+        `;
+
+        return;
+    }
+
+    dataUrut.forEach(
+        ({item,index}) => {
+
+        const kategori =
+            item.kategori ||
+            item.catatan ||
+            "Tanpa kategori";
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "item-produksi";
+
+        div.innerHTML = `
+
+            <div class="item-atas">
+
+                <div>
+
+                    <span class="jumlah">
+                        ${escapeHTML(item.jumlah)}
+                    </span>
+
+                    <span class="satuan">
+                        ${escapeHTML(
+                            item.satuan || ""
+                        )}
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <span class="tag-kategori">
+                        ${escapeHTML(kategori)}
+                    </span>
+
+                    <span class="tag-kandang">
+                        ${escapeHTML(
+                            item.kandang ||
+                            "Tanpa kandang"
+                        )}
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="detail-produksi">
+
+                📅 ${formatTanggal(item.tanggal)}
+
+                &nbsp;&nbsp;
+
+                ⏰ ${escapeHTML(
+                    item.jam || "-"
+                )}
+
+            </div>
+
+            <div class="item-bawah">
+
+                <div class="aksi-produksi">
+
+                    <button
+                        class="btn-edit"
+                        onclick="editCatatan(${index})">
+
+                        ✏️ Edit
+
+                    </button>
+
+                    <button
+                        class="btn-danger"
+                        onclick="mintaHapusCatatan(${index})">
+
+                        🗑️ Hapus
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+        container.appendChild(div);
+    });
+}
+
+
+/* =====================================================
+   EDIT PRODUKSI
+===================================================== */
+
+function editCatatan(index){
+
+    const data = dataAktif();
+
+    if(!data[index]) return;
+
+    const item = data[index];
+
+    indexEditProduksi = index;
+
+    tampilkanKategoriCatatanDropdown();
+    tampilkanKategoriSatuanDropdown();
+    tampilkanKategoriKandangDropdown();
+
+    document.getElementById(
+        "editCatatan"
+    ).value =
+        item.kategori ||
+        item.catatan ||
+        "";
+
+    document.getElementById(
+        "editKandang"
+    ).value =
+        item.kandang || "";
+
+    document.getElementById(
+        "editJumlah"
+    ).value =
+        item.jumlah;
+
+    document.getElementById(
+        "editSatuan"
+    ).value =
+        item.satuan || "";
+
+    document.getElementById(
+        "editTanggal"
+    ).value =
+        item.tanggal || "";
+
+    document.getElementById(
+        "editJam"
+    ).value =
+        item.jam || "";
+
+    document
+        .getElementById(
+            "modalEditProduksi"
+        )
+        .classList.add("show");
+}
+
+function simpanEditProduksi(){
+
+    if(indexEditProduksi === -1){
+        return;
+    }
+
+    const kategori =
+        document.getElementById(
+            "editCatatan"
+        ).value;
+
+    const kandang =
+        document.getElementById(
+            "editKandang"
+        ).value;
+
+    const jumlah =
+        document.getElementById(
+            "editJumlah"
+        ).value;
+
+    const satuan =
+        document.getElementById(
+            "editSatuan"
+        ).value;
+
+    const tanggal =
+        document.getElementById(
+            "editTanggal"
+        ).value;
+
+    const jam =
+        document.getElementById(
+            "editJam"
+        ).value;
+
+    if(!kategori){
+
+        tampilkanPeringatan(
+            "Silakan pilih catatan terlebih dahulu.",
+            "Catatan Belum Dipilih"
+        );
+
+        return;
+    }
+
+    if(!kandang){
+
+        tampilkanPeringatan(
+            "Silakan pilih kandang / sekat terlebih dahulu.",
+            "Kandang Belum Dipilih"
+        );
+
+        return;
+    }
+
+    if(
+        jumlah === "" ||
+        Number(jumlah) < 0
+    ){
+
+        tampilkanPeringatan(
+            "Silakan isi jumlah produksi terlebih dahulu.",
+            "Jumlah Belum Diisi"
+        );
+
+        return;
+    }
+
+    if(!satuan){
+
+        tampilkanPeringatan(
+            "Silakan pilih satuan terlebih dahulu.",
+            "Satuan Belum Dipilih"
+        );
+
+        return;
+    }
+
+    if(!tanggal || !jam){
+
+        tampilkanPeringatan(
+            "Silakan isi tanggal dan jam terlebih dahulu.",
+            "Tanggal & Jam Belum Diisi"
+        );
+
+        return;
+    }
+
+    const data = dataAktif();
+
+    if(!data[indexEditProduksi]){
+        return;
+    }
+
+    data[indexEditProduksi] = {
+
+        jumlah:Number(jumlah),
+
+        satuan:satuan,
+
+        catatan:kategori,
+
+        kategori:kategori,
+
+        kandang:kandang,
+
+        tanggal:tanggal,
+
+        jam:jam
+    };
+
+    simpanDataProduksi();
+
+    tampilkanCatatan();
+    updateStatistik();
+    tampilkanLaporan();
+
+    tutupModalEditProduksi();
+
+    tampilkanPesan(
+        "Perubahan data berhasil disimpan.",
+        "Berhasil Disimpan",
+        "✅"
+    );
+}
+
+function tutupModalEditProduksi(){
+
+    document
+        .getElementById(
+            "modalEditProduksi"
+        )
+        .classList.remove("show");
+
+    indexEditProduksi = -1;
+}
+
+
+/* =====================================================
+   STATISTIK
+===================================================== */
+
+function updateStatistik(){
+
+    const data = dataAktif();
+
+    const totalPerKandang = new Map();
+
+    daftarKategoriKandang.forEach(
+        nama => totalPerKandang.set(nama,0)
+    );
+
+    let totalKeseluruhan = 0;
+
+    data.forEach(item => {
+
+        const jumlah =
+            Number(item.jumlah) || 0;
+
+        totalKeseluruhan += jumlah;
+
+        if(totalPerKandang.has(item.kandang)){
+
+            totalPerKandang.set(
+                item.kandang,
+                totalPerKandang.get(item.kandang) + jumlah
+            );
+        }
+    });
+
+    let html = `
+        <div class="stat-card">
+            <div class="angka">${data.length}</div>
+            <div class="label">Total Catatan</div>
+        </div>
+    `;
+
+    totalPerKandang.forEach((total,nama) => {
+
+        html += `
+            <div class="stat-card">
+                <div class="angka">${formatAngka(total)}</div>
+                <div class="label">${escapeHTML(nama)}</div>
+            </div>
+        `;
+    });
+
+    html += `
+        <div class="stat-card">
+            <div class="angka">${formatAngka(totalKeseluruhan)}</div>
+            <div class="label">Total Keseluruhan</div>
+        </div>
+    `;
+
+    ["statistikPembukuan"].forEach(id => {
+
+        const el =
+            document.getElementById(id);
+
+        if(el){
+            el.innerHTML = html;
+        }
+    });
+}
+
+
+/* =====================================================
+   FILTER LAPORAN
+===================================================== */
+
+function ubahFilterPeriode(){
+
+    const periode =
+        document.getElementById(
+            "filterPeriode"
+        ).value;
+
+    const sekarang = new Date();
+
+    const tahun =
+        String(sekarang.getFullYear());
+
+    const bulan =
+        String(
+            sekarang.getMonth() + 1
+        ).padStart(2,"0");
+
+    const tanggal =
+        String(
+            sekarang.getDate()
+        ).padStart(2,"0");
+
+    const harian =
+        document.getElementById("filterHarian");
+
+    const bulanan =
+        document.getElementById("filterBulanan");
+
+    const tahunan =
+        document.getElementById("filterTahunan");
+
+    if(periode === "harian" && !harian.value){
+        harian.value = `${tahun}-${bulan}-${tanggal}`;
+    }
+
+    if(periode === "bulanan" && !bulanan.value){
+        bulanan.value = `${tahun}-${bulan}`;
+    }
+
+    if(periode === "tahunan" && !tahunan.value){
+        tahunan.value = tahun;
+    }
+
+    document.getElementById(
+        "wrapFilterHarian"
+    ).style.display =
+        periode === "harian" ? "block" : "none";
+
+    document.getElementById(
+        "wrapFilterBulanan"
+    ).style.display =
+        periode === "bulanan" ? "block" : "none";
+
+    document.getElementById(
+        "wrapFilterTahunan"
+    ).style.display =
+        periode === "tahunan" ? "block" : "none";
+
+    tampilkanLaporan();
+}
+
+function cocokFilterLaporan(item){
+
+    const periodeEl =
+        document.getElementById("filterPeriode");
+
+    const periode =
+        periodeEl ? periodeEl.value : "semua";
+
+    const tanggal =
+        item.tanggal || "";
+
+    if(periode === "harian"){
+
+        const nilai =
+            document.getElementById(
+                "filterHarian"
+            ).value;
+
+        return !nilai || tanggal === nilai;
+    }
+
+    if(periode === "bulanan"){
+
+        const nilai =
+            document.getElementById(
+                "filterBulanan"
+            ).value;
+
+        return !nilai || tanggal.slice(0,7) === nilai;
+    }
+
+    if(periode === "tahunan"){
+
+        const nilai =
+            document.getElementById(
+                "filterTahunan"
+            ).value.trim();
+
+        return !nilai || tanggal.slice(0,4) === nilai;
+    }
+
+    return true;
+}
+
+
+/* =====================================================
+   EKSPOR LAPORAN (PDF & EXCEL) - TANPA INTERNET
+===================================================== */
+
+function ambilDataLaporan(){
+
+    return dataAktif()
+        .filter(item => cocokFilterLaporan(item))
+        .sort((a,b) => {
+
+            const tanggalA = a.tanggal || "";
+            const tanggalB = b.tanggal || "";
+
+            if(tanggalA !== tanggalB){
+                return tanggalB.localeCompare(tanggalA);
+            }
+
+            return (b.jam || "00:00")
+                .localeCompare(a.jam || "00:00");
+        });
+}
+
+function labelPeriodeLaporan(){
+
+    const periode =
+        document.getElementById(
+            "filterPeriode"
+        ).value;
+
+    if(periode === "harian"){
+
+        const v =
+            document.getElementById(
+                "filterHarian"
+            ).value;
+
+        return v
+            ? `Harian - ${formatTanggal(v)}`
+            : "Harian - semua tanggal";
+    }
+
+    if(periode === "bulanan"){
+
+        const v =
+            document.getElementById(
+                "filterBulanan"
+            ).value;
+
+        if(!v) return "Bulanan - semua bulan";
+
+        const bagian = v.split("-");
+
+        return `Bulanan - ${bagian[1]}/${bagian[0]}`;
+    }
+
+    if(periode === "tahunan"){
+
+        const v =
+            document.getElementById(
+                "filterTahunan"
+            ).value.trim();
+
+        return v
+            ? `Tahunan - ${v}`
+            : "Tahunan - semua tahun";
+    }
+
+    return "Semua data";
+}
+
+function waktuCetak(){
+
+    const d = new Date();
+
+    const dua = n =>
+        String(n).padStart(2,"0");
+
+    return `${dua(d.getDate())}/${dua(d.getMonth() + 1)}/${d.getFullYear()} ${dua(d.getHours())}:${dua(d.getMinutes())}`;
+}
+
+function barisLaporan(data){
+
+    return data.map((item,i) => [
+        i + 1,
+        formatTanggal(item.tanggal),
+        item.jam || "-",
+        item.kategori || item.catatan || "-",
+        item.kandang || "-",
+        Number(item.jumlah) || 0,
+        item.satuan || ""
+    ]);
+}
+
+const JUDUL_KOLOM_LAPORAN = [
+    "No.",
+    "Tanggal",
+    "Jam",
+    "Catatan",
+    "Kandang / Sekat",
+    "Jumlah",
+    "Satuan"
+];
+
+function unduhFile(bytes,namaFile,tipe){
+
+    const blob =
+        new Blob([bytes],{type:tipe});
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
+    a.href = url;
+    a.download = namaFile;
+
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    setTimeout(
+        () => URL.revokeObjectURL(url),
+        2000
+    );
+}
+
+function namaFileLaporan(ekstensi){
+
+    const dasar =
+        `Laporan-${pembukuanAktif}-${labelPeriodeLaporan()}`
+        .replace(/[^A-Za-z0-9]+/g,"-")
+        .replace(/^-+|-+$/g,"");
+
+    return `${dasar}.${ekstensi}`;
+}
+
+
+/* ---------- EXCEL (.xlsx) ---------- */
+
+let tabelCRC = null;
+
+function hitungCRC32(bytes){
+
+    if(!tabelCRC){
+
+        tabelCRC = new Uint32Array(256);
+
+        for(let n = 0; n < 256; n++){
+
+            let c = n;
+
+            for(let k = 0; k < 8; k++){
+                c = (c & 1)
+                    ? (0xEDB88320 ^ (c >>> 1))
+                    : (c >>> 1);
+            }
+
+            tabelCRC[n] = c >>> 0;
+        }
+    }
+
+    let crc = 0xFFFFFFFF;
+
+    for(let i = 0; i < bytes.length; i++){
+        crc = tabelCRC[(crc ^ bytes[i]) & 0xFF] ^ (crc >>> 8);
+    }
+
+    return (crc ^ 0xFFFFFFFF) >>> 0;
+}
+
+function gabungBytes(daftar){
+
+    let total = 0;
+
+    daftar.forEach(b => total += b.length);
+
+    const hasil = new Uint8Array(total);
+
+    let posisi = 0;
+
+    daftar.forEach(b => {
+        hasil.set(b,posisi);
+        posisi += b.length;
+    });
+
+    return hasil;
+}
+
+function buatZip(files){
+
+    const enc = new TextEncoder();
+
+    const bagian = [];
+    const pusat = [];
+
+    let offset = 0;
+
+    files.forEach(f => {
+
+        const nama = enc.encode(f.name);
+        const data = enc.encode(f.content);
+        const crc = hitungCRC32(data);
+
+        const lokal = new Uint8Array(30 + nama.length);
+        const dl = new DataView(lokal.buffer);
+
+        dl.setUint32(0,0x04034b50,true);
+        dl.setUint16(4,20,true);
+        dl.setUint16(6,0,true);
+        dl.setUint16(8,0,true);
+        dl.setUint16(10,0,true);
+        dl.setUint16(12,0x21,true);
+        dl.setUint32(14,crc,true);
+        dl.setUint32(18,data.length,true);
+        dl.setUint32(22,data.length,true);
+        dl.setUint16(26,nama.length,true);
+        dl.setUint16(28,0,true);
+        lokal.set(nama,30);
+
+        const cd = new Uint8Array(46 + nama.length);
+        const dc = new DataView(cd.buffer);
+
+        dc.setUint32(0,0x02014b50,true);
+        dc.setUint16(4,20,true);
+        dc.setUint16(6,20,true);
+        dc.setUint16(8,0,true);
+        dc.setUint16(10,0,true);
+        dc.setUint16(12,0,true);
+        dc.setUint16(14,0x21,true);
+        dc.setUint32(16,crc,true);
+        dc.setUint32(20,data.length,true);
+        dc.setUint32(24,data.length,true);
+        dc.setUint16(28,nama.length,true);
+        dc.setUint16(30,0,true);
+        dc.setUint16(32,0,true);
+        dc.setUint16(34,0,true);
+        dc.setUint16(36,0,true);
+        dc.setUint32(38,0,true);
+        dc.setUint32(42,offset,true);
+        cd.set(nama,46);
+
+        bagian.push(lokal,data);
+        pusat.push(cd);
+
+        offset += lokal.length + data.length;
+    });
+
+    const ukuranPusat =
+        pusat.reduce((n,b) => n + b.length,0);
+
+    const akhir = new Uint8Array(22);
+    const da = new DataView(akhir.buffer);
+
+    da.setUint32(0,0x06054b50,true);
+    da.setUint16(4,0,true);
+    da.setUint16(6,0,true);
+    da.setUint16(8,files.length,true);
+    da.setUint16(10,files.length,true);
+    da.setUint32(12,ukuranPusat,true);
+    da.setUint32(16,offset,true);
+    da.setUint16(20,0,true);
+
+    return gabungBytes([...bagian,...pusat,akhir]);
+}
+
+function selExcel(kolom,baris,nilai,tebal){
+
+    const ref =
+        String.fromCharCode(65 + kolom) + baris;
+
+    const gaya =
+        tebal ? ' s="1"' : "";
+
+    if(typeof nilai === "number"){
+        return `<c r="${ref}"${gaya}><v>${nilai}</v></c>`;
+    }
+
+    return `<c r="${ref}"${gaya} t="inlineStr"><is><t xml:space="preserve">${escapeHTML(nilai)}</t></is></c>`;
+}
+
+function buatFileExcel(baris,info){
+
+    const ns =
+        'xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"';
+
+    const xml =
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+
+    let r = 1;
+
+    const rows = [];
+
+    rows.push(`<row r="${r}">${selExcel(0,r,"Laporan Produksi",true)}</row>`);
+    r++;
+
+    rows.push(`<row r="${r}">${selExcel(0,r,"Pembukuan: " + info.pembukuan,false)}</row>`);
+    r++;
+
+    rows.push(`<row r="${r}">${selExcel(0,r,"Periode: " + info.periode,false)}</row>`);
+    r++;
+
+    rows.push(`<row r="${r}">${selExcel(0,r,"Dicetak: " + info.waktu,false)}</row>`);
+    r += 2;
+
+    rows.push(
+        `<row r="${r}">` +
+        JUDUL_KOLOM_LAPORAN
+            .map((j,i) => selExcel(i,r,j,true))
+            .join("") +
+        "</row>"
+    );
+    r++;
+
+    baris.forEach(b => {
+
+        rows.push(
+            `<row r="${r}">` +
+            b.map((v,i) => selExcel(i,r,v,false)).join("") +
+            "</row>"
+        );
+
+        r++;
+    });
+
+    const lebar = [6,13,9,18,22,12,12];
+
+    const cols =
+        lebar
+        .map((w,i) =>
+            `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`)
+        .join("");
+
+    const sheet =
+        `${xml}<worksheet ${ns}><cols>${cols}</cols><sheetData>${rows.join("")}</sheetData></worksheet>`;
+
+    const rel =
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
+
+    return buatZip([
+
+        {
+            name:"[Content_Types].xml",
+            content:`${xml}<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>`
+        },
+
+        {
+            name:"_rels/.rels",
+            content:`${xml}<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${rel}/officeDocument" Target="xl/workbook.xml"/></Relationships>`
+        },
+
+        {
+            name:"xl/workbook.xml",
+            content:`${xml}<workbook ${ns} xmlns:r="${rel}"><sheets><sheet name="Laporan" sheetId="1" r:id="rId1"/></sheets></workbook>`
+        },
+
+        {
+            name:"xl/_rels/workbook.xml.rels",
+            content:`${xml}<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${rel}/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="${rel}/styles" Target="styles.xml"/></Relationships>`
+        },
+
+        {
+            name:"xl/styles.xml",
+            content:`${xml}<styleSheet ${ns}><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`
+        },
+
+        {
+            name:"xl/worksheets/sheet1.xml",
+            content:sheet
+        }
+    ]);
+}
+
+
+/* ---------- PDF ---------- */
+
+function pdfTeks(teks){
+
+    return String(teks ?? "")
+        .replace(/[^\x20-\x7E\xA0-\xFF]/g,"?")
+        .replace(/\\/g,"\\\\")
+        .replace(/\(/g,"\\(")
+        .replace(/\)/g,"\\)");
+}
+
+function potongTeks(teks,maks){
+
+    const t = String(teks ?? "");
+
+    return t.length > maks
+        ? t.slice(0,maks - 1) + "."
+        : t;
+}
+
+function buatFilePDF(baris,info){
+
+    const W = 595;
+    const H = 842;
+    const M = 40;
+    const tinggiBaris = 16;
+    const batasBawah = 50;
+
+    const posisiX = [40,68,128,170,265,370,430];
+    const maksKarakter = [4,11,7,20,22,12,16];
+
+    const halaman = [];
+
+    let isi = [];
+    let y = H - M;
+
+    function tulis(x,yy,teks,tebal,ukuran){
+
+        isi.push(
+            `BT /${tebal ? "F2" : "F1"} ${ukuran} Tf ${x} ${yy} Td (${pdfTeks(teks)}) Tj ET`
+        );
+    }
+
+    function garis(yy,abu){
+
+        isi.push(
+            `${abu} G 0.5 w ${M} ${yy} m ${W - M} ${yy} l S 0 G`
+        );
+    }
+
+    function judulKolom(){
+
+        JUDUL_KOLOM_LAPORAN.forEach((j,i) => {
+
+            tulis(
+                posisiX[i],
+                y,
+                potongTeks(j,maksKarakter[i] + 4),
+                true,
+                9
+            );
+        });
+
+        garis(y - 5,0);
+
+        y -= tinggiBaris + 2;
+    }
+
+    tulis(M,y,"Laporan Produksi",true,15);
+    y -= 22;
+
+    tulis(M,y,"Pembukuan: " + info.pembukuan,false,10);
+    y -= 14;
+
+    tulis(M,y,"Periode: " + info.periode,false,10);
+    y -= 14;
+
+    tulis(M,y,"Dicetak: " + info.waktu,false,10);
+    y -= 26;
+
+    judulKolom();
+
+    if(baris.length === 0){
+
+        tulis(M,y,"Tidak ada data pada periode ini.",false,9);
+    }
+
+    baris.forEach(b => {
+
+        if(y < batasBawah){
+
+            halaman.push(isi);
+
+            isi = [];
+            y = H - M;
+
+            judulKolom();
+        }
+
+        b.forEach((nilai,i) => {
+
+            tulis(
+                posisiX[i],
+                y,
+                potongTeks(nilai,maksKarakter[i]),
+                false,
+                9
+            );
+        });
+
+        garis(y - 5,0.85);
+
+        y -= tinggiBaris;
+    });
+
+    halaman.push(isi);
+
+    const objek = [];
+
+    objek[1] = "<< /Type /Catalog /Pages 2 0 R >>";
+
+    const daftarHalaman = [];
+
+    halaman.forEach((_,i) => {
+        daftarHalaman.push(`${5 + i * 2} 0 R`);
+    });
+
+    objek[2] =
+        `<< /Type /Pages /Kids [${daftarHalaman.join(" ")}] /Count ${halaman.length} >>`;
+
+    objek[3] =
+        "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>";
+
+    objek[4] =
+        "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>";
+
+    halaman.forEach((perintah,i) => {
+
+        const teksNomor =
+            `BT /F1 8 Tf ${W / 2 - 30} 25 Td (Halaman ${i + 1} / ${halaman.length}) Tj ET`;
+
+        const stream =
+            perintah.join("\n") + "\n" + teksNomor;
+
+        objek[5 + i * 2] =
+            `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${W} ${H}] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${6 + i * 2} 0 R >>`;
+
+        objek[6 + i * 2] =
+            `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`;
+    });
+
+    let pdf = "%PDF-1.4\n";
+
+    const offset = [];
+
+    for(let n = 1; n < objek.length; n++){
+
+        offset[n] = pdf.length;
+
+        pdf += `${n} 0 obj\n${objek[n]}\nendobj\n`;
+    }
+
+    const mulaiXref = pdf.length;
+
+    pdf += `xref\n0 ${objek.length}\n`;
+    pdf += "0000000000 65535 f \n";
+
+    for(let n = 1; n < objek.length; n++){
+
+        pdf += String(offset[n]).padStart(10,"0") + " 00000 n \n";
+    }
+
+    pdf += `trailer\n<< /Size ${objek.length} /Root 1 0 R >>\n`;
+    pdf += `startxref\n${mulaiXref}\n%%EOF`;
+
+    const bytes = new Uint8Array(pdf.length);
+
+    for(let i = 0; i < pdf.length; i++){
+        bytes[i] = pdf.charCodeAt(i) & 0xFF;
+    }
+
+    return bytes;
+}
+
+
+/* ---------- TOMBOL EKSPOR ---------- */
+
+function infoEkspor(){
+
+    return {
+        pembukuan:pembukuanAktif,
+        periode:labelPeriodeLaporan(),
+        waktu:waktuCetak()
+    };
+}
+
+function eksporExcel(){
+
+    const data = ambilDataLaporan();
+
+    if(data.length === 0){
+
+        tampilkanPeringatan(
+            "Tidak ada data untuk diekspor pada periode ini.",
+            "Data Kosong"
+        );
+
+        return;
+    }
+
+    unduhFile(
+        buatFileExcel(barisLaporan(data),infoEkspor()),
+        namaFileLaporan("xlsx"),
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+
+    tampilkanPesan(
+        "Laporan berhasil diekspor ke Excel.",
+        "Berhasil Diekspor",
+        "✅"
+    );
+}
+
+function eksporPDF(){
+
+    const data = ambilDataLaporan();
+
+    if(data.length === 0){
+
+        tampilkanPeringatan(
+            "Tidak ada data untuk diekspor pada periode ini.",
+            "Data Kosong"
+        );
+
+        return;
+    }
+
+    unduhFile(
+        buatFilePDF(barisLaporan(data),infoEkspor()),
+        namaFileLaporan("pdf"),
+        "application/pdf"
+    );
+
+    tampilkanPesan(
+        "Laporan berhasil diekspor ke PDF.",
+        "Berhasil Diekspor",
+        "✅"
+    );
+}
+
+
+/* =====================================================
+   LAPORAN
+===================================================== */
+
+function tampilkanLaporan(){
+
+    const tbody =
+        document.getElementById(
+            "tabelLaporan"
+        );
+
+    if(!tbody) return;
+
+    const data = dataAktif();
+
+    tbody.innerHTML = "";
+
+    if(data.length === 0){
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="7"
+                    style="text-align:center;">
+
+                    Belum ada data.
+
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    const dataUrut =
+        data
+        .map((item,index) => ({
+            item:item,
+            index:index
+        }))
+        .filter(({item}) => cocokFilterLaporan(item))
+        .sort((a,b) => {
+
+            const tanggalA =
+                a.item.tanggal || "";
+
+            const tanggalB =
+                b.item.tanggal || "";
+
+            if(tanggalA !== tanggalB){
+
+                return tanggalB.localeCompare(
+                    tanggalA
+                );
+            }
+
+            const jamA =
+                a.item.jam || "00:00";
+
+            const jamB =
+                b.item.jam || "00:00";
+
+            return jamB.localeCompare(
+                jamA
+            );
+        });
+
+    if(dataUrut.length === 0){
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="7"
+                    style="text-align:center;">
+
+                    Tidak ada data pada periode ini.
+
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    dataUrut.forEach(
+        ({item},index) => {
+
+        const kategori =
+            item.kategori ||
+            item.catatan ||
+            "-";
+
+        const tr =
+            document.createElement("tr");
+
+        tr.innerHTML = `
+
+            <td>
+                ${index + 1}
+            </td>
+
+            <td>
+                ${formatTanggal(item.tanggal)}
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    item.jam || "-"
+                )}
+            </td>
+
+            <td>
+                ${escapeHTML(kategori)}
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    item.kandang || "-"
+                )}
+            </td>
+
+            <td>
+                <strong>
+                    ${escapeHTML(item.jumlah)}
+                </strong>
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    item.satuan || ""
+                )}
+            </td>
+
+        `;
+
+        tbody.appendChild(tr);
+    });
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+function tutupModal(id){
+
+    const modal =
+        document.getElementById(id);
+
+    if(modal){
+        modal.classList.remove("show");
+    }
+}
+
+function tutupJikaOverlay(event,id){
+
+    if(event.target.id !== id){
+        return;
+    }
+
+    if(id === "modalEditProduksi"){
+
+        tutupModalEditProduksi();
+
+    }else if(id === "modalPesan"){
+
+        tutupModalPesan();
+
+    }else{
+
+        tutupModal(id);
+    }
+}
+
+
+/* =====================================================
+   TANGGAL JAM
+===================================================== */
+
+function setTanggalJamSekarang(){
+
+    const sekarang =
+        new Date();
+
+    const tahun =
+        sekarang.getFullYear();
+
+    const bulan =
+        String(
+            sekarang.getMonth() + 1
+        ).padStart(2,"0");
+
+    const tanggal =
+        String(
+            sekarang.getDate()
+        ).padStart(2,"0");
+
+    const jam =
+        String(
+            sekarang.getHours()
+        ).padStart(2,"0");
+
+    const menit =
+        String(
+            sekarang.getMinutes()
+        ).padStart(2,"0");
+
+    document.getElementById(
+        "inputTanggal"
+    ).value =
+        `${tahun}-${bulan}-${tanggal}`;
+
+    document.getElementById(
+        "inputJam"
+    ).value =
+        `${jam}:${menit}`;
+}
+
+
+/* =====================================================
+   ENTER
+===================================================== */
+
+document
+    .getElementById("namaPembukuan")
+    .addEventListener(
+        "keydown",
+        function(event){
+
+        if(event.key === "Enter"){
+            simpanPembukuan();
+        }
+    });
+
+document
+    .getElementById(
+        "namaKategoriCatatan"
+    )
+    .addEventListener(
+        "keydown",
+        function(event){
+
+        if(event.key === "Enter"){
+            simpanKategoriCatatan();
+        }
+    });
+
+document
+    .getElementById(
+        "namaKategoriSatuan"
+    )
+    .addEventListener(
+        "keydown",
+        function(event){
+
+        if(event.key === "Enter"){
+            simpanKategoriSatuan();
+        }
+    });
+
+document
+    .getElementById(
+        "namaKategoriKandang"
+    )
+    .addEventListener(
+        "keydown",
+        function(event){
+
+        if(event.key === "Enter"){
+            simpanKategoriKandang();
+        }
+    });
+
+
+/* =====================================================
+   ESCAPE
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+    if(event.key !== "Escape"){
+        return;
+    }
+
+    const modalPesan =
+        document.getElementById(
+            "modalPesan"
+        );
+
+    if(
+        modalPesan &&
+        modalPesan.classList.contains("show")
+    ){
+
+        tutupModalPesan();
+        return;
+    }
+
+    const modalHapus =
+        document.getElementById(
+            "modalKonfirmasiHapus"
+        );
+
+    if(
+        modalHapus &&
+        modalHapus.classList.contains("show")
+    ){
+
+        aksiHapus = null;
+
+        tutupModal(
+            "modalKonfirmasiHapus"
+        );
+
+        return;
+    }
+
+    const modalEdit =
+        document.getElementById(
+            "modalEditProduksi"
+        );
+
+    if(
+        modalEdit &&
+        modalEdit.classList.contains("show")
+    ){
+
+        tutupModalEditProduksi();
+        return;
+    }
+
+    document
+        .querySelectorAll(
+            ".modal-overlay.show"
+        )
+        .forEach(modal => {
+
+            tutupModal(modal.id);
+
+        });
+});
+
+
+/* =====================================================
+   LOGIN / KUNCI PIN + BIOMETRIK (LOKAL)
+===================================================== */
+
+const PANJANG_PIN = 6;
+
+const KUNCI = {
+    mode:"login",
+    pin:"",
+    pinSementara:"",
+    sibuk:false,
+    bioDidukung:false,
+    timer:null
+};
+
+const KUNCI_STORAGE_KEYS = [
+    "daftarPembukuan",
+    "pembukuanAktif",
+    "semuaDataProduksi",
+    "daftarKategoriCatatan",
+    "daftarKategoriSatuan",
+    "daftarKategoriKandang",
+    "kategoriPerPembukuan",
+    "kunciPinHash",
+    "kunciPinGaram",
+    "biometrikId",
+    "pinGagal",
+    "pinTunggu"
+];
+
+/* ---------- Util ---------- */
+
+function acakBytes(n){
+
+    const b = new Uint8Array(n);
+
+    crypto.getRandomValues(b);
+
+    return b;
+}
+
+function bytesKeHex(bytes){
+
+    return Array.from(
+        bytes,
+        x => x.toString(16).padStart(2,"0")
+    ).join("");
+}
+
+function bufKeB64(buf){
+
+    let teks = "";
+
+    new Uint8Array(buf).forEach(
+        b => teks += String.fromCharCode(b)
+    );
+
+    return btoa(teks)
+        .replace(/\+/g,"-")
+        .replace(/\//g,"_")
+        .replace(/=+$/,"");
+}
+
+function b64KeBuf(b64){
+
+    const bersih =
+        b64.replace(/-/g,"+").replace(/_/g,"/");
+
+    const teks =
+        atob(bersih + "=".repeat((4 - bersih.length % 4) % 4));
+
+    const bytes = new Uint8Array(teks.length);
+
+    for(let i = 0; i < teks.length; i++){
+        bytes[i] = teks.charCodeAt(i);
+    }
+
+    return bytes;
+}
+
+function cyrb53(str,seed=0){
+
+    let h1 = 0xdeadbeef ^ seed;
+    let h2 = 0x41c6ce57 ^ seed;
+
+    for(let i = 0; i < str.length; i++){
+
+        const ch = str.charCodeAt(i);
+
+        h1 = Math.imul(h1 ^ ch,2654435761);
+        h2 = Math.imul(h2 ^ ch,1597334677);
+    }
+
+    h1 = Math.imul(h1 ^ (h1 >>> 16),2246822507) ^ Math.imul(h2 ^ (h2 >>> 13),3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16),2246822507) ^ Math.imul(h1 ^ (h1 >>> 13),3266489909);
+
+    return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+}
+
+function adaSubtle(){
+
+    return !!(
+        window.crypto &&
+        window.crypto.subtle
+    );
+}
+
+/* ---------- Hash PIN (tidak menyimpan PIN asli) ---------- */
+
+async function hitungHashPin(pin,garam,metode){
+
+    if(metode === "p"){
+
+        const enc = new TextEncoder();
+
+        const kunci =
+            await crypto.subtle.importKey(
+                "raw",
+                enc.encode(pin),
+                "PBKDF2",
+                false,
+                ["deriveBits"]
+            );
+
+        const bits =
+            await crypto.subtle.deriveBits(
+                {
+                    name:"PBKDF2",
+                    salt:enc.encode(garam),
+                    iterations:100000,
+                    hash:"SHA-256"
+                },
+                kunci,
+                256
+            );
+
+        return "p:" + bytesKeHex(new Uint8Array(bits));
+    }
+
+    return "f:" +
+        cyrb53(garam + ":" + pin) + "-" +
+        cyrb53(pin + ":" + garam,7);
+}
+
+function adaPin(){
+
+    return !!localStorage.getItem("kunciPinHash");
+}
+
+async function simpanPinBaru(pin){
+
+    const garam = bytesKeHex(acakBytes(16));
+
+    const metode = adaSubtle() ? "p" : "f";
+
+    const hash =
+        await hitungHashPin(pin,garam,metode);
+
+    localStorage.setItem("kunciPinGaram",garam);
+    localStorage.setItem("kunciPinHash",hash);
+
+    localStorage.removeItem("pinGagal");
+    localStorage.removeItem("pinTunggu");
+}
+
+async function cekPinBenar(pin){
+
+    const hash =
+        localStorage.getItem("kunciPinHash");
+
+    const garam =
+        localStorage.getItem("kunciPinGaram") || "";
+
+    if(!hash) return false;
+
+    const metode =
+        hash.startsWith("p:") ? "p" : "f";
+
+    if(metode === "p" && !adaSubtle()){
+        throw new Error("subtle");
+    }
+
+    return (
+        await hitungHashPin(pin,garam,metode)
+    ) === hash;
+}
+
+/* ---------- Tampilan ---------- */
+
+function elKunci(id){
+
+    return document.getElementById(id);
+}
+
+function gambarDots(){
+
+    const el = elKunci("pinDots");
+
+    el.innerHTML = "";
+
+    for(let i = 0; i < PANJANG_PIN; i++){
+
+        const span =
+            document.createElement("span");
+
+        if(i < KUNCI.pin.length){
+            span.className = "isi";
+        }
+
+        el.appendChild(span);
+    }
+}
+
+function setErrorKunci(teks){
+
+    elKunci("kunciError").textContent = teks;
+}
+
+function sisaTunggu(){
+
+    const t =
+        Number(localStorage.getItem("pinTunggu")) || 0;
+
+    const sisa =
+        Math.ceil((t - Date.now()) / 1000);
+
+    return sisa > 0 ? sisa : 0;
+}
+
+function mulaiHitungMundur(){
+
+    clearInterval(KUNCI.timer);
+
+    const perbarui = () => {
+
+        const sisa = sisaTunggu();
+
+        if(sisa <= 0){
+
+            clearInterval(KUNCI.timer);
+            setErrorKunci("");
+
+            return;
+        }
+
+        setErrorKunci(
+            `Terlalu banyak percobaan. Coba lagi dalam ${sisa} detik.`
+        );
+    };
+
+    perbarui();
+
+    if(sisaTunggu() > 0){
+        KUNCI.timer = setInterval(perbarui,1000);
+    }
+}
+
+function tampilkanLayarKunci(mode){
+
+    KUNCI.mode = mode;
+    KUNCI.pin = "";
+    KUNCI.sibuk = false;
+
+    const teks = {
+
+        buat:[
+            "Buat PIN",
+            "Buat 6 digit PIN untuk mengunci aplikasi ini"
+        ],
+
+        konfirmasi:[
+            "Ulangi PIN",
+            "Masukkan PIN yang sama sekali lagi"
+        ],
+
+        login:[
+            "Selamat Datang",
+            "Masukkan PIN untuk membuka Catatan Produksi"
+        ],
+
+        ubahLama:[
+            "PIN Lama",
+            "Masukkan PIN Anda saat ini"
+        ],
+
+        ubahBaru:[
+            "PIN Baru",
+            "Buat 6 digit PIN yang baru"
+        ],
+
+        ubahKonfirmasi:[
+            "Ulangi PIN Baru",
+            "Masukkan PIN baru sekali lagi"
+        ]
+    };
+
+    elKunci("kunciJudul").textContent = teks[mode][0];
+    elKunci("kunciSub").textContent = teks[mode][1];
+
+    elKunci("panelPin").style.display = "block";
+    elKunci("panelBio").style.display = "none";
+
+    elKunci("btnLupaPin").style.display =
+        mode === "login" ? "inline-block" : "none";
+
+    elKunci("btnBatalKunci").style.display =
+        mode.startsWith("ubah") ? "inline-block" : "none";
+
+    perbaruiTombolBiometrikKunci();
+
+    setErrorKunci("");
+    gambarDots();
+
+    elKunci("layarKunci").classList.remove("hide");
+
+    mulaiHitungMundur();
+}
+
+function perbaruiTombolBiometrikKunci(){
+
+    const tombol =
+        elKunci("btnBiometrikKunci");
+
+    const tampil =
+        KUNCI.mode === "login" &&
+        KUNCI.bioDidukung &&
+        !!localStorage.getItem("biometrikId");
+
+    tombol.classList.toggle("kosong",!tampil);
+}
+
+function sembunyikanLayarKunci(){
+
+    elKunci("layarKunci").classList.add("hide");
+
+    KUNCI.pin = "";
+    KUNCI.pinSementara = "";
+}
+
+function bukaKunci(){
+
+    sessionStorage.setItem("sesiLogin","1");
+
+    sembunyikanLayarKunci();
+}
+
+function goyangKunci(pesan){
+
+    const dots = elKunci("pinDots");
+
+    dots.classList.remove("goyang");
+
+    void dots.offsetWidth;
+
+    dots.classList.add("goyang");
+
+    setErrorKunci(pesan);
+
+    setTimeout(() => {
+
+        KUNCI.pin = "";
+        KUNCI.sibuk = false;
+
+        gambarDots();
+
+    },400);
+}
+
+/* ---------- Input PIN ---------- */
+
+function tekanAngka(angka){
+
+    if(
+        KUNCI.sibuk ||
+        sisaTunggu() > 0 ||
+        KUNCI.pin.length >= PANJANG_PIN
+    ){
+        return;
+    }
+
+    KUNCI.pin += angka;
+
+    setErrorKunci("");
+    gambarDots();
+
+    if(KUNCI.pin.length === PANJANG_PIN){
+
+        KUNCI.sibuk = true;
+
+        setTimeout(prosesPin,150);
+    }
+}
+
+function hapusAngka(){
+
+    if(KUNCI.sibuk) return;
+
+    KUNCI.pin = KUNCI.pin.slice(0,-1);
+
+    gambarDots();
+}
+
+function gagalPin(){
+
+    const n =
+        (Number(localStorage.getItem("pinGagal")) || 0) + 1;
+
+    localStorage.setItem("pinGagal",n);
+
+    if(n % 5 === 0){
+
+        const detik =
+            Math.min(300,30 * Math.pow(2,n / 5 - 1));
+
+        localStorage.setItem(
+            "pinTunggu",
+            Date.now() + detik * 1000
+        );
+
+        goyangKunci("");
+
+        mulaiHitungMundur();
+
+        return;
+    }
+
+    goyangKunci(`PIN salah (${n % 5}/5)`);
+}
+
+async function prosesPin(){
+
+    const pin = KUNCI.pin;
+    const mode = KUNCI.mode;
+
+    try{
+
+        if(mode === "login" || mode === "ubahLama"){
+
+            if(await cekPinBenar(pin)){
+
+                localStorage.removeItem("pinGagal");
+                localStorage.removeItem("pinTunggu");
+
+                if(mode === "login"){
+                    bukaKunci();
+                }else{
+                    tampilkanLayarKunci("ubahBaru");
+                }
+
+            }else{
+
+                gagalPin();
+            }
+
+            return;
+        }
+
+        if(mode === "buat" || mode === "ubahBaru"){
+
+            KUNCI.pinSementara = pin;
+
+            tampilkanLayarKunci(
+                mode === "buat"
+                ? "konfirmasi"
+                : "ubahKonfirmasi"
+            );
+
+            return;
+        }
+
+        if(mode === "konfirmasi"){
+
+            if(pin === KUNCI.pinSementara){
+
+                await simpanPinBaru(pin);
+
+                KUNCI.pinSementara = "";
+
+                selesaiBuatPin();
+
+            }else{
+
+                KUNCI.pinSementara = "";
+
+                tampilkanLayarKunci("buat");
+
+                goyangKunci("PIN tidak sama, ulangi dari awal");
+            }
+
+            return;
+        }
+
+        if(mode === "ubahKonfirmasi"){
+
+            if(pin === KUNCI.pinSementara){
+
+                await simpanPinBaru(pin);
+
+                sembunyikanLayarKunci();
+
+                tampilkanPesan(
+                    "PIN berhasil diubah.",
+                    "Berhasil Disimpan",
+                    "✅"
+                );
+
+            }else{
+
+                KUNCI.pinSementara = "";
+
+                tampilkanLayarKunci("ubahBaru");
+
+                goyangKunci("PIN tidak sama, ulangi dari awal");
+            }
+        }
+
+    }catch(e){
+
+        KUNCI.pin = "";
+        KUNCI.sibuk = false;
+
+        gambarDots();
+
+        setErrorKunci(
+            "Browser ini tidak bisa memverifikasi PIN."
+        );
+    }
+}
+
+/* ---------- Setelah membuat PIN ---------- */
+
+function selesaiBuatPin(){
+
+    sessionStorage.setItem("sesiLogin","1");
+
+    if(
+        KUNCI.bioDidukung &&
+        !localStorage.getItem("biometrikId")
+    ){
+
+        elKunci("panelPin").style.display = "none";
+        elKunci("panelBio").style.display = "block";
+
+        elKunci("kunciJudul").textContent =
+            "Aktifkan Biometrik?";
+
+        elKunci("kunciSub").textContent =
+            "Buka aplikasi lebih cepat dengan sidik jari, wajah, atau kunci layar perangkat. PIN tetap bisa dipakai.";
+
+        return;
+    }
+
+    bukaKunci();
+}
+
+async function aktifkanBiometrikAwal(){
+
+    await daftarBiometrik();
+
+    bukaKunci();
+}
+
+function lewatiBiometrik(){
+
+    bukaKunci();
+}
+
+/* ---------- Biometrik (WebAuthn, lokal di perangkat) ---------- */
+
+async function cekDukunganBiometrik(){
+
+    try{
+
+        const aman =
+            window.PublicKeyCredential &&
+            window.isSecureContext &&
+            location.hostname &&
+            (
+                location.protocol === "https:" ||
+                location.hostname === "localhost"
+            );
+
+        if(!aman) return false;
+
+        return await PublicKeyCredential
+            .isUserVerifyingPlatformAuthenticatorAvailable();
+
+    }catch(e){
+
+        return false;
+    }
+}
+
+async function daftarBiometrik(){
+
+    try{
+
+        const kredensial =
+            await navigator.credentials.create({
+
+                publicKey:{
+
+                    challenge:acakBytes(32),
+
+                    rp:{
+                        name:"Catatan Produksi",
+                        id:location.hostname
+                    },
+
+                    user:{
+                        id:acakBytes(16),
+                        name:"pengguna",
+                        displayName:"Pengguna"
+                    },
+
+                    pubKeyCredParams:[
+                        {type:"public-key",alg:-7},
+                        {type:"public-key",alg:-257}
+                    ],
+
+                    authenticatorSelection:{
+                        authenticatorAttachment:"platform",
+                        userVerification:"required",
+                        residentKey:"discouraged"
+                    },
+
+                    timeout:60000,
+                    attestation:"none"
+                }
+            });
+
+        localStorage.setItem(
+            "biometrikId",
+            bufKeB64(kredensial.rawId)
+        );
+
+        return true;
+
+    }catch(e){
+
+        if(e && e.name === "NotAllowedError"){
+
+            tampilkanPeringatan(
+                "Verifikasi dibatalkan atau tidak berhasil, jadi biometrik belum diaktifkan.",
+                "Biometrik Belum Aktif"
+            );
+
+        }else{
+
+            tampilkanPeringatan(
+                "Biometrik tidak bisa diaktifkan di perangkat atau cara membuka aplikasi ini.",
+                "Biometrik Gagal"
+            );
+        }
+
+        return false;
+    }
+}
+
+async function loginBiometrik(){
+
+    const id =
+        localStorage.getItem("biometrikId");
+
+    if(!id || KUNCI.sibuk) return;
+
+    try{
+
+        await navigator.credentials.get({
+
+            publicKey:{
+
+                challenge:acakBytes(32),
+
+                allowCredentials:[
+                    {
+                        type:"public-key",
+                        id:b64KeBuf(id)
+                    }
+                ],
+
+                userVerification:"required",
+                timeout:60000,
+                rpId:location.hostname
+            }
+        });
+
+        bukaKunci();
+
+    }catch(e){
+
+        if(e && e.name !== "NotAllowedError"){
+
+            setErrorKunci(
+                "Biometrik gagal, silakan pakai PIN."
+            );
+        }
+    }
+}
+
+/* ---------- Halaman Keamanan ---------- */
+
+function bukaKeamanan(){
+
+    tampilkanHalamanInternal(
+        "halamanKeamanan"
+    );
+
+    perbaruiHalamanKeamanan();
+}
+
+function perbaruiHalamanKeamanan(){
+
+    const status = elKunci("statusBiometrik");
+    const tombol = elKunci("btnToggleBiometrik");
+    const catatan = elKunci("catatanBiometrik");
+
+    const aktif =
+        !!localStorage.getItem("biometrikId");
+
+    if(!KUNCI.bioDidukung){
+
+        status.textContent = "Tidak tersedia";
+
+        tombol.style.display = "none";
+
+        catatan.textContent =
+            "Biometrik membutuhkan perangkat dengan sidik jari, Face ID, atau kunci layar, dan aplikasi harus dibuka lewat alamat https://. Jika file ini dibuka langsung dari penyimpanan (file://), biometrik tidak bisa dipakai, tetapi PIN tetap berfungsi.";
+
+        return;
+    }
+
+    tombol.style.display = "inline-block";
+
+    status.textContent =
+        aktif
+        ? "Aktif - bisa membuka dengan sidik jari / wajah"
+        : "Belum aktif";
+
+    tombol.textContent =
+        aktif ? "Matikan" : "Aktifkan";
+
+    catatan.textContent =
+        "Data tetap tersimpan lokal di perangkat ini. PIN selalu bisa dipakai sebagai cadangan.";
+}
+
+async function toggleBiometrik(){
+
+    if(localStorage.getItem("biometrikId")){
+
+        localStorage.removeItem("biometrikId");
+
+        perbaruiHalamanKeamanan();
+
+        return;
+    }
+
+    const ok = await daftarBiometrik();
+
+    perbaruiHalamanKeamanan();
+
+    if(ok){
+
+        tampilkanPesan(
+            "Biometrik berhasil diaktifkan.",
+            "Berhasil Diaktifkan",
+            "✅"
+        );
+    }
+}
+
+function ubahPin(){
+
+    tampilkanLayarKunci("ubahLama");
+}
+
+function batalKunci(){
+
+    sembunyikanLayarKunci();
+}
+
+function kunciSekarang(){
+
+    sessionStorage.removeItem("sesiLogin");
+
+    bukaHalaman("dashboard");
+
+    tampilkanLayarKunci("login");
+
+    if(KUNCI.bioDidukung && localStorage.getItem("biometrikId")){
+        loginBiometrik();
+    }
+}
+
+/* ---------- Lupa PIN ---------- */
+
+function lupaPin(){
+
+    bukaPopupHapus(
+
+        `
+        Aplikasi ini menyimpan data hanya di perangkat Anda, jadi
+        PIN yang lupa
+        <span class="hapus-highlight">tidak bisa dipulihkan</span>.
+        <br><br>
+        Jika dilanjutkan,
+        <span class="hapus-highlight">semua data</span>
+        (pembukuan, kategori, dan catatan produksi)
+        akan dihapus, lalu Anda bisa membuat PIN baru.
+        `,
+
+        hapusSemuaDataAplikasi
+    );
+}
+
+function hapusSemuaDataAplikasi(){
+
+    KUNCI_STORAGE_KEYS.forEach(
+        k => localStorage.removeItem(k)
+    );
+
+    sessionStorage.removeItem("sesiLogin");
+
+    location.reload();
+}
+
+/* ---------- Mulai ---------- */
+
+async function inisialisasiKunci(){
+
+    if(
+        adaPin() &&
+        sessionStorage.getItem("sesiLogin") === "1"
+    ){
+
+        sembunyikanLayarKunci();
+    }
+
+    const perluLogin =
+        !elKunci("layarKunci").classList.contains("hide");
+
+    if(perluLogin){
+
+        tampilkanLayarKunci(
+            adaPin() ? "login" : "buat"
+        );
+    }
+
+    KUNCI.bioDidukung =
+        await cekDukunganBiometrik();
+
+    if(!perluLogin) return;
+
+    perbaruiTombolBiometrikKunci();
+
+    if(
+        KUNCI.mode === "login" &&
+        KUNCI.bioDidukung &&
+        localStorage.getItem("biometrikId")
+    ){
+
+        loginBiometrik();
+    }
+}
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+    const overlay = elKunci("layarKunci");
+
+    if(
+        !overlay ||
+        overlay.classList.contains("hide") ||
+        elKunci("panelPin").style.display === "none" ||
+        document.querySelector(".modal-overlay.show")
+    ){
+        return;
+    }
+
+    if(/^[0-9]$/.test(event.key)){
+
+        tekanAngka(event.key);
+
+    }else if(event.key === "Backspace"){
+
+        hapusAngka();
+    }
+});
+
+
+/* =====================================================
+   BACKUP & RESTORE
+===================================================== */
+
+const BACKUP_APLIKASI = "catatan-produksi";
+const BACKUP_VERSI = 1;
+
+const BACKUP_KEYS_JSON = [
+    "daftarPembukuan",
+    "semuaDataProduksi",
+    "daftarKategoriCatatan",
+    "daftarKategoriSatuan",
+    "daftarKategoriKandang",
+    "kategoriPerPembukuan"
+];
+
+let dataRestoreTertunda = null;
+
+function hitungCatatanBackup(semuaData){
+
+    let total = 0;
+
+    Object.values(semuaData || {}).forEach(arr => {
+
+        if(Array.isArray(arr)){
+            total += arr.length;
+        }
+    });
+
+    return total;
+}
+
+function bukaBackupRestore(){
+
+    tampilkanHalamanInternal("halamanBackup");
+
+    const info =
+        document.getElementById("infoDataBackup");
+
+    if(info){
+
+        info.textContent =
+            `${daftarPembukuan.length} pembukuan, ` +
+            `${hitungCatatanBackup(semuaDataProduksi)} catatan produksi`;
+    }
+}
+
+function bacaDataBackup(){
+
+    const data = {};
+
+    BACKUP_KEYS_JSON.forEach(k => {
+
+        const mentah = localStorage.getItem(k);
+
+        if(mentah !== null){
+
+            try{
+                data[k] = JSON.parse(mentah);
+            }catch(e){}
+        }
+    });
+
+    data.pembukuanAktif =
+        localStorage.getItem("pembukuanAktif") || "";
+
+    return data;
+}
+
+function unduhBackup(){
+
+    const sekarang = new Date();
+
+    const p = n => String(n).padStart(2,"0");
+
+    const stempel =
+        `${sekarang.getFullYear()}-${p(sekarang.getMonth() + 1)}-${p(sekarang.getDate())}` +
+        `_${p(sekarang.getHours())}${p(sekarang.getMinutes())}`;
+
+    const isi = {
+        aplikasi:BACKUP_APLIKASI,
+        versi:BACKUP_VERSI,
+        dibuat:sekarang.toISOString(),
+        data:bacaDataBackup()
+    };
+
+    unduhFile(
+        JSON.stringify(isi,null,2),
+        `backup-catatan-produksi_${stempel}.json`,
+        "application/json"
+    );
+
+    tampilkanPesan(
+        "File backup berhasil dibuat. Simpan file tersebut di tempat yang aman.",
+        "Backup Berhasil",
+        "✅"
+    );
+}
+
+function validasiBackup(isi){
+
+    if(
+        !isi ||
+        typeof isi !== "object" ||
+        isi.aplikasi !== BACKUP_APLIKASI ||
+        !isi.data ||
+        typeof isi.data !== "object"
+    ){
+        return "File ini bukan file backup Catatan Produksi.";
+    }
+
+    const d = isi.data;
+
+    if(
+        !Array.isArray(d.daftarPembukuan) ||
+        d.daftarPembukuan.length === 0 ||
+        !d.daftarPembukuan.every(n => typeof n === "string")
+    ){
+        return "Daftar pembukuan pada file backup tidak valid.";
+    }
+
+    if(
+        !d.semuaDataProduksi ||
+        typeof d.semuaDataProduksi !== "object" ||
+        Array.isArray(d.semuaDataProduksi) ||
+        !Object.values(d.semuaDataProduksi)
+            .every(a => Array.isArray(a))
+    ){
+        return "Data produksi pada file backup tidak valid.";
+    }
+
+    for(const k of [
+        "daftarKategoriCatatan",
+        "daftarKategoriSatuan",
+        "daftarKategoriKandang"
+    ]){
+        if(d[k] !== undefined && !Array.isArray(d[k])){
+            return "Data kategori pada file backup tidak valid.";
+        }
+    }
+
+    if(
+        d.kategoriPerPembukuan !== undefined &&
+        (
+            typeof d.kategoriPerPembukuan !== "object" ||
+            Array.isArray(d.kategoriPerPembukuan)
+        )
+    ){
+        return "Data kategori pada file backup tidak valid.";
+    }
+
+    return null;
+}
+
+function pilihFileRestore(input){
+
+    const file = input.files && input.files[0];
+
+    input.value = "";
+
+    if(!file) return;
+
+    const reader = new FileReader();
+
+    reader.onerror = function(){
+
+        tampilkanPeringatan(
+            "File tidak dapat dibaca.",
+            "Restore Gagal"
+        );
+    };
+
+    reader.onload = function(){
+
+        let isi;
+
+        try{
+            isi = JSON.parse(reader.result);
+        }catch(e){
+
+            tampilkanPeringatan(
+                "File bukan format JSON yang valid.",
+                "Restore Gagal"
+            );
+
+            return;
+        }
+
+        const galat = validasiBackup(isi);
+
+        if(galat){
+
+            tampilkanPeringatan(
+                galat,
+                "Restore Gagal"
+            );
+
+            return;
+        }
+
+        dataRestoreTertunda = isi;
+
+        let tanggal = "-";
+
+        if(isi.dibuat){
+
+            const t = new Date(isi.dibuat);
+
+            if(!isNaN(t)){
+
+                tanggal =
+                    t.toLocaleString("id-ID",{
+                        dateStyle:"long",
+                        timeStyle:"short"
+                    });
+            }
+        }
+
+        document.getElementById(
+            "pesanKonfirmasiRestore"
+        ).innerHTML = `
+            Backup tanggal
+            <span class="hapus-highlight">${escapeHTML(tanggal)}</span>
+            berisi
+            <span class="hapus-highlight">
+            ${isi.data.daftarPembukuan.length} pembukuan
+            dan ${hitungCatatanBackup(isi.data.semuaDataProduksi)} catatan produksi
+            </span>.
+            <br><br>
+            Semua data saat ini akan diganti dan tidak dapat dikembalikan.
+        `;
+
+        document
+            .getElementById("modalKonfirmasiRestore")
+            .classList.add("show");
+    };
+
+    reader.readAsText(file);
+}
+
+function batalRestore(){
+
+    dataRestoreTertunda = null;
+
+    tutupModal("modalKonfirmasiRestore");
+}
+
+function jalankanRestore(){
+
+    const isi = dataRestoreTertunda;
+
+    dataRestoreTertunda = null;
+
+    tutupModal("modalKonfirmasiRestore");
+
+    if(!isi) return;
+
+    const d = isi.data;
+
+    try{
+
+        BACKUP_KEYS_JSON.forEach(k => {
+
+            if(d[k] === undefined){
+
+                localStorage.removeItem(k);
+
+            }else{
+
+                localStorage.setItem(
+                    k,
+                    JSON.stringify(d[k])
+                );
+            }
+        });
+
+        const aktif =
+            d.daftarPembukuan.includes(d.pembukuanAktif)
+            ? d.pembukuanAktif
+            : d.daftarPembukuan[0];
+
+        localStorage.setItem("pembukuanAktif",aktif);
+
+    }catch(e){
+
+        tampilkanPeringatan(
+            "Data gagal dipulihkan. Penyimpanan perangkat mungkin penuh.",
+            "Restore Gagal"
+        );
+
+        return;
+    }
+
+    sessionStorage.setItem("restoreBerhasil","1");
+
+    location.reload();
+}
+
+/* =====================================================
+   MULAI
+===================================================== */
+
+function mulaiAplikasi(){
+
+    siapkanDataAwal();
+
+    tampilkanPembukuan();
+
+    tampilkanKategoriCatatanDropdown();
+
+    tampilkanKategoriSatuanDropdown();
+
+    tampilkanKategoriKandangDropdown();
+
+    tampilkanCatatan();
+
+    updateStatistik();
+
+    tampilkanLaporan();
+
+    setTanggalJamSekarang();
+
+    inisialisasiKunci();
+
+    if(sessionStorage.getItem("restoreBerhasil") === "1"){
+
+        sessionStorage.removeItem("restoreBerhasil");
+
+        tampilkanPesan(
+            "Data berhasil dipulihkan dari file backup.",
+            "Restore Berhasil",
+            "✅"
+        );
+    }
+}
+
+mulaiAplikasi();
+
+</script>
+
+</body>
+</html>

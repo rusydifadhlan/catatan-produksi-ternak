@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Catatan Produksi Ternak</string>
+    <string name="title_activity_main">Catatan Produksi Ternak</string>
+    <string name="package_name">com.catatanproduksiternak.app</string>
+    <string name="custom_url_scheme">com.catatanproduksiternak.app</string>
+</resources>
