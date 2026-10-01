@@ -13,7 +13,19 @@
     padding:0;
 }
 
+:root{
+    --skala-teks:1;
+    --skala-angka:1;
+}
+
+button,
+select,
+textarea{
+    font-size:calc(13.3333px * var(--skala-teks));
+}
+
 body{
+    font-size:calc(16px * var(--skala-teks));
     font-family:Arial,Helvetica,sans-serif;
     background:#f4f6f8;
     color:#1f2937;
@@ -41,13 +53,13 @@ body{
 }
 
 .header h1{
-    font-size:25px;
+    font-size:calc(25px * var(--skala-teks));
     margin-bottom:6px;
 }
 
 .header p{
     color:#6b7280;
-    font-size:14px;
+    font-size:calc(14px * var(--skala-teks));
 }
 
 .card{
@@ -59,13 +71,13 @@ body{
 }
 
 .pembukuan-label{
-    font-size:13px;
+    font-size:calc(13px * var(--skala-teks));
     color:#6b7280;
     margin-bottom:7px;
 }
 
 .pembukuan-title{
-    font-size:17px;
+    font-size:calc(17px * var(--skala-teks));
     font-weight:bold;
     margin-bottom:10px;
 }
@@ -79,7 +91,7 @@ input{
     border-radius:12px;
     background:white;
     padding:0 13px;
-    font-size:15px;
+    font-size:calc(15px * var(--skala-teks));
     outline:none;
 }
 
@@ -89,7 +101,7 @@ input:focus{
 }
 
 .form-card h2{
-    font-size:18px;
+    font-size:calc(18px * var(--skala-teks));
     margin-bottom:16px;
 }
 
@@ -99,7 +111,7 @@ input:focus{
 
 .form-group label{
     display:block;
-    font-size:13px;
+    font-size:calc(13px * var(--skala-teks));
     font-weight:bold;
     margin-bottom:7px;
     color:#374151;
@@ -121,7 +133,7 @@ input:focus{
     border-radius:14px;
     background:#4f46e5;
     color:white;
-    font-size:15px;
+    font-size:calc(15px * var(--skala-teks));
     font-weight:bold;
     cursor:pointer;
 }
@@ -165,13 +177,13 @@ input:focus{
 }
 
 .stat-card .angka{
-    font-size:23px;
+    font-size:calc(23px * var(--skala-angka));
     font-weight:bold;
     margin-bottom:5px;
 }
 
 .stat-card .label{
-    font-size:11px;
+    font-size:calc(11px * var(--skala-teks));
     color:#6b7280;
     word-break:break-word;
 }
@@ -184,7 +196,7 @@ input:focus{
 }
 
 .judul-list h2{
-    font-size:18px;
+    font-size:calc(18px * var(--skala-teks));
 }
 
 .btn-hapus-semua{
@@ -193,9 +205,15 @@ input:focus{
     color:#dc2626;
     border-radius:10px;
     padding:8px 10px;
-    font-size:12px;
+    font-size:calc(12px * var(--skala-teks));
     font-weight:bold;
     cursor:pointer;
+}
+
+#daftarProduksi{
+    max-height:340px;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
 }
 
 .item-produksi{
@@ -213,13 +231,13 @@ input:focus{
 }
 
 .jumlah{
-    font-size:20px;
+    font-size:calc(20px * var(--skala-teks));
     font-weight:bold;
 }
 
 .satuan{
     color:#6b7280;
-    font-size:13px;
+    font-size:calc(13px * var(--skala-teks));
 }
 
 .tag-kategori{
@@ -228,7 +246,7 @@ input:focus{
     color:#4f46e5;
     padding:5px 9px;
     border-radius:8px;
-    font-size:11px;
+    font-size:calc(11px * var(--skala-teks));
     font-weight:bold;
 }
 
@@ -238,7 +256,7 @@ input:focus{
     color:#059669;
     padding:5px 9px;
     border-radius:8px;
-    font-size:11px;
+    font-size:calc(11px * var(--skala-teks));
     font-weight:bold;
     margin-left:5px;
 }
@@ -246,7 +264,7 @@ input:focus{
 .detail-produksi{
     margin-top:9px;
     color:#6b7280;
-    font-size:12px;
+    font-size:calc(12px * var(--skala-teks));
 }
 
 .item-bawah{
@@ -267,7 +285,7 @@ input:focus{
     border:none;
     border-radius:9px;
     padding:8px 10px;
-    font-size:12px;
+    font-size:calc(12px * var(--skala-teks));
     font-weight:bold;
     cursor:pointer;
 }
@@ -306,13 +324,13 @@ input:focus{
     border:none;
     background:transparent;
     color:#9ca3af;
-    font-size:11px;
+    font-size:calc(11px * var(--skala-teks));
     cursor:pointer;
 }
 
 .nav-btn span{
     display:block;
-    font-size:21px;
+    font-size:calc(21px * var(--skala-teks));
     margin-bottom:3px;
 }
 
@@ -343,13 +361,13 @@ input:focus{
 }
 
 .menu-icon{
-    font-size:22px;
+    font-size:calc(22px * var(--skala-teks));
     width:38px;
     display:inline-block;
 }
 
 .menu-title{
-    font-size:15px;
+    font-size:calc(15px * var(--skala-teks));
     font-weight:bold;
 }
 
@@ -357,13 +375,13 @@ input:focus{
     margin-left:42px;
     margin-top:3px;
     color:#8a919b;
-    font-size:12px;
+    font-size:calc(12px * var(--skala-teks));
 }
 
 .back-btn{
     border:none;
     background:transparent;
-    font-size:15px;
+    font-size:calc(15px * var(--skala-teks));
     padding:5px 0;
     margin-bottom:15px;
     color:#4f46e5;
@@ -379,11 +397,11 @@ input:focus{
 }
 
 .page-title .icon{
-    font-size:28px;
+    font-size:calc(28px * var(--skala-teks));
 }
 
 .page-title h2{
-    font-size:22px;
+    font-size:calc(22px * var(--skala-teks));
 }
 
 .card-header{
@@ -394,7 +412,7 @@ input:focus{
 }
 
 .card-header h3{
-    font-size:16px;
+    font-size:calc(16px * var(--skala-teks));
 }
 
 .btn-tambah{
@@ -423,7 +441,7 @@ input:focus{
 }
 
 .setting-item-icon{
-    font-size:22px;
+    font-size:calc(22px * var(--skala-teks));
 }
 
 .setting-item-info{
@@ -432,11 +450,11 @@ input:focus{
 
 .setting-item-name{
     font-weight:bold;
-    font-size:14px;
+    font-size:calc(14px * var(--skala-teks));
 }
 
 .setting-item-status{
-    font-size:11px;
+    font-size:calc(11px * var(--skala-teks));
     color:#6b7280;
     margin-top:3px;
 }
@@ -506,7 +524,7 @@ input:focus{
 }
 
 .modal-header h3{
-    font-size:19px;
+    font-size:calc(19px * var(--skala-teks));
 }
 
 .btn-close{
@@ -515,7 +533,7 @@ input:focus{
     border:none;
     background:#f3f4f6;
     border-radius:50%;
-    font-size:18px;
+    font-size:calc(18px * var(--skala-teks));
     cursor:pointer;
 }
 
@@ -547,13 +565,13 @@ input:focus{
     color:#4f46e5;
     border-radius:12px;
     padding:11px 13px;
-    font-size:12px;
+    font-size:calc(12px * var(--skala-teks));
     margin-bottom:16px;
 }
 
 .edit-info strong{
     display:block;
-    font-size:14px;
+    font-size:calc(14px * var(--skala-teks));
     margin-bottom:3px;
 }
 
@@ -593,18 +611,18 @@ input:focus{
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:30px;
+    font-size:calc(30px * var(--skala-teks));
 }
 
 .hapus-title{
-    font-size:20px;
+    font-size:calc(20px * var(--skala-teks));
     font-weight:bold;
     margin-bottom:8px;
 }
 
 .hapus-message{
     color:#6b7280;
-    font-size:13px;
+    font-size:calc(13px * var(--skala-teks));
     line-height:1.5;
     margin-bottom:20px;
 }
@@ -652,7 +670,7 @@ input:focus{
 table{
     width:100%;
     border-collapse:collapse;
-    font-size:12px;
+    font-size:calc(12px * var(--skala-teks));
 }
 
 th,
@@ -670,7 +688,7 @@ th{
     text-align:center;
     color:#9ca3af;
     padding:25px 10px;
-    font-size:13px;
+    font-size:calc(13px * var(--skala-teks));
 }
 
 /* ===== LOGIN / KUNCI ===== */
@@ -707,17 +725,17 @@ th{
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:36px;
+    font-size:calc(36px * var(--skala-teks));
 }
 
 .kunci-judul{
-    font-size:22px;
+    font-size:calc(22px * var(--skala-teks));
     font-weight:bold;
     margin-bottom:6px;
 }
 
 .kunci-sub{
-    font-size:13px;
+    font-size:calc(13px * var(--skala-teks));
     opacity:.85;
     margin-bottom:22px;
     line-height:1.45;
@@ -757,7 +775,7 @@ th{
 
 .kunci-error{
     min-height:20px;
-    font-size:12px;
+    font-size:calc(12px * var(--skala-teks));
     color:#fecaca;
     margin-bottom:12px;
     font-weight:bold;
@@ -778,7 +796,7 @@ th{
     border-radius:50%;
     background:rgba(255,255,255,.16);
     color:white;
-    font-size:26px;
+    font-size:calc(26px * var(--skala-teks));
     font-weight:bold;
     cursor:pointer;
     -webkit-tap-highlight-color:transparent;
@@ -790,7 +808,7 @@ th{
 }
 
 .keypad button.kecil{
-    font-size:24px;
+    font-size:calc(24px * var(--skala-teks));
 }
 
 .keypad button.kosong{
@@ -807,13 +825,13 @@ th{
     border:none;
     background:transparent;
     color:rgba(255,255,255,.85);
-    font-size:13px;
+    font-size:calc(13px * var(--skala-teks));
     cursor:pointer;
     text-decoration:underline;
 }
 
 .bio-panel .bio-ikon{
-    font-size:56px;
+    font-size:calc(56px * var(--skala-teks));
     margin-bottom:18px;
 }
 
@@ -824,7 +842,7 @@ th{
     border-radius:14px;
     background:white;
     color:#4f46e5;
-    font-size:15px;
+    font-size:calc(15px * var(--skala-teks));
     font-weight:bold;
     cursor:pointer;
     margin-bottom:10px;
@@ -836,7 +854,7 @@ th{
     border:none;
     background:transparent;
     color:white;
-    font-size:14px;
+    font-size:calc(14px * var(--skala-teks));
     cursor:pointer;
 }
 
@@ -850,7 +868,7 @@ th{
     .keypad button{
         width:62px;
         height:62px;
-        font-size:22px;
+        font-size:calc(22px * var(--skala-teks));
     }
 
     .kunci-logo{
@@ -874,7 +892,7 @@ th{
     }
 
     .stat-card .angka{
-        font-size:20px;
+        font-size:calc(20px * var(--skala-angka));
     }
 
     .aksi-produksi{
@@ -901,7 +919,7 @@ th{
     padding:12px 22px 12px 14px;
     background:linear-gradient(135deg,#4f46e5,#6d5ef5);
     color:white;
-    font-size:14px;
+    font-size:calc(14px * var(--skala-teks));
     font-weight:bold;
     cursor:pointer;
     box-shadow:0 8px 22px rgba(79,70,229,.45);
@@ -921,7 +939,7 @@ th{
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:21px;
+    font-size:calc(21px * var(--skala-teks));
     line-height:1;
     padding-bottom:2px;
 }
@@ -938,7 +956,148 @@ th{
 #modalTambahProduksi .row{
     gap:10px;
 }
+
+.opsi-ukuran{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.opsi-ukuran button{
+    border:2px solid #e5e7eb;
+    background:white;
+    border-radius:13px;
+    padding:13px 8px;
+    font-weight:bold;
+    color:#374151;
+    cursor:pointer;
+}
+
+.opsi-ukuran button.terpilih{
+    border-color:#4f46e5;
+    background:#eef2ff;
+    color:#4f46e5;
+}
+
+.contoh-ukuran{
+    border:1px dashed #d9dee5;
+    border-radius:13px;
+    padding:14px;
+    margin-bottom:12px;
+}
+
+.contoh-ukuran strong{
+    display:block;
+    font-size:calc(20px * var(--skala-teks));
+    margin-bottom:5px;
+}
+
+.contoh-ukuran span{
+    color:#6b7280;
+    font-size:calc(14px * var(--skala-teks));
+}
 </style>
+<script>
+/* =====================================================
+   UKURAN TULISAN (otomatis menyesuaikan layar)
+===================================================== */
+const KUNCI_UKURAN_TULISAN = "ukuranTulisan";
+
+const PENGALI_UKURAN_TULISAN = {
+    kecil:0.9,
+    otomatis:1,
+    besar:1.12,
+    "sangat-besar":1.25
+};
+
+function ukuranTulisanTersimpan(){
+
+    let v = "otomatis";
+
+    try{
+        v = localStorage.getItem(KUNCI_UKURAN_TULISAN) || "otomatis";
+    }catch(e){}
+
+    return PENGALI_UKURAN_TULISAN[v] ? v : "otomatis";
+}
+
+function skalaOtomatisLayar(){
+
+    const lebar = Math.min(
+        window.screen && window.screen.width || 9999,
+        window.screen && window.screen.height || 9999,
+        window.innerWidth || 9999
+    );
+
+    if(!isFinite(lebar) || lebar >= 9999) return 1;
+
+    return Math.min(1.15,Math.max(0.9,lebar / 390));
+}
+
+function terapkanUkuranTulisan(){
+
+    const pilihan = ukuranTulisanTersimpan();
+
+    let skala =
+        skalaOtomatisLayar() * PENGALI_UKURAN_TULISAN[pilihan];
+
+    skala = Math.min(1.4,Math.max(0.85,skala));
+
+    const angka = 1 + (skala - 1) * 0.5;
+
+    const root = document.documentElement.style;
+
+    root.setProperty("--skala-teks",skala.toFixed(3));
+    root.setProperty("--skala-angka",angka.toFixed(3));
+
+    document
+        .querySelectorAll("[data-ukuran]")
+        .forEach(btn => btn.classList.toggle(
+            "terpilih",
+            btn.getAttribute("data-ukuran") === pilihan
+        ));
+
+    const info = document.getElementById("infoUkuranTulisan");
+
+    if(info){
+        info.textContent =
+            "Skala saat ini: " + Math.round(skala * 100) + "%";
+    }
+
+    if(typeof batasiTinggiDaftarProduksi === "function"){
+        requestAnimationFrame(batasiTinggiDaftarProduksi);
+    }
+}
+
+function pilihUkuranTulisan(nilai){
+
+    if(!PENGALI_UKURAN_TULISAN[nilai]) return;
+
+    try{
+        localStorage.setItem(KUNCI_UKURAN_TULISAN,nilai);
+    }catch(e){}
+
+    terapkanUkuranTulisan();
+}
+
+function bukaUkuranTulisan(){
+
+    tampilkanHalamanInternal("halamanUkuranTulisan");
+
+    terapkanUkuranTulisan();
+}
+
+terapkanUkuranTulisan();
+
+window.addEventListener("resize",terapkanUkuranTulisan);
+
+document.addEventListener(
+    "DOMContentLoaded",
+    terapkanUkuranTulisan
+);
+</script>
+
 </head>
 
 <body>
@@ -1238,6 +1397,20 @@ th{
 
         </button>
 
+        <button onclick="bukaUkuranTulisan()">
+
+            <span class="menu-icon">🔠</span>
+
+            <span class="menu-title">
+                Ukuran Tulisan
+            </span>
+
+            <div class="menu-desc">
+                Atur besar tulisan agar pas dengan layar HP
+            </div>
+
+        </button>
+
         <button onclick="bukaBackupRestore()">
 
             <span class="menu-icon">💾</span>
@@ -1251,6 +1424,75 @@ th{
             </div>
 
         </button>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     UKURAN TULISAN
+===================================================== -->
+
+<div id="halamanUkuranTulisan" class="halaman">
+
+<div class="container">
+
+    <button
+        class="back-btn"
+        onclick="kembaliKePengaturan()">
+
+        ← Kembali
+
+    </button>
+
+    <div class="page-title">
+
+        <span class="icon">🔠</span>
+
+        <h2>Ukuran Tulisan</h2>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h3>Pilih Ukuran</h3>
+
+        </div>
+
+        <div class="edit-info">
+            <strong id="infoUkuranTulisan">-</strong>
+            Mode Otomatis menyesuaikan lebar layar HP Anda.
+            Pilihan lain memperkecil atau memperbesar dari ukuran otomatis.
+        </div>
+
+        <div class="opsi-ukuran">
+
+            <button data-ukuran="kecil"
+                onclick="pilihUkuranTulisan('kecil')">Kecil</button>
+
+            <button data-ukuran="otomatis"
+                onclick="pilihUkuranTulisan('otomatis')">Otomatis</button>
+
+            <button data-ukuran="besar"
+                onclick="pilihUkuranTulisan('besar')">Besar</button>
+
+            <button data-ukuran="sangat-besar"
+                onclick="pilihUkuranTulisan('sangat-besar')">Sangat Besar</button>
+
+        </div>
+
+        <div class="contoh-ukuran">
+
+            <strong>1.250 butir telur</strong>
+
+            <span>📅 Contoh tulisan: tanggal, jam, dan nama kandang.</span>
+
+        </div>
 
     </div>
 
@@ -1325,7 +1567,7 @@ th{
         <input
             type="file"
             id="fileRestore"
-            accept=".json,application/json"
+            accept="*/*"
             style="display:none"
             onchange="pilihFileRestore(this)">
 
@@ -1665,7 +1907,7 @@ th{
 
         <div
             id="catatanBiometrik"
-            style="font-size:12px;color:#6b7280;line-height:1.5;margin-top:14px">
+            style="font-size:calc(12px * var(--skala-teks));color:#6b7280;line-height:1.5;margin-top:14px">
         </div>
 
     </div>
@@ -4383,6 +4625,7 @@ function tampilkanCatatan(){
         .filter(Boolean);
 
     container.innerHTML = "";
+    container.style.maxHeight = "none";
 
     if(data.length === 0){
 
@@ -4542,7 +4785,55 @@ function tampilkanCatatan(){
 
         container.appendChild(div);
     });
+
+    batasiTinggiDaftarProduksi();
 }
+
+/* Tampilkan 3 catatan saja, sisanya digulir di dalam daftar */
+const JUMLAH_CATATAN_TERLIHAT = 3;
+
+function batasiTinggiDaftarProduksi(){
+
+    const container =
+        document.getElementById("daftarProduksi");
+
+    if(!container) return;
+
+    const items =
+        container.querySelectorAll(".item-produksi");
+
+    if(items.length <= JUMLAH_CATATAN_TERLIHAT){
+
+        container.style.maxHeight = "none";
+
+        return;
+    }
+
+    const pertama = items[0];
+
+    const terakhir =
+        items[JUMLAH_CATATAN_TERLIHAT - 1];
+
+    const tinggi =
+        terakhir.offsetTop +
+        terakhir.offsetHeight -
+        pertama.offsetTop;
+
+    /* halaman tersembunyi: pakai batas bawaan dari CSS */
+    if(tinggi <= 0){
+
+        container.style.maxHeight = "";
+
+        return;
+    }
+
+    container.style.maxHeight = (tinggi + 2) + "px";
+}
+
+window.addEventListener(
+    "resize",
+    batasiTinggiDaftarProduksi
+);
 
 
 /* =====================================================
@@ -5022,28 +5313,127 @@ const JUDUL_KOLOM_LAPORAN = [
     "Satuan"
 ];
 
-function unduhFile(bytes,namaFile,tipe){
+function blobKeBase64(blob){
 
-    const blob =
-        new Blob([bytes],{type:tipe});
+    return new Promise((ok,gagal) => {
 
-    const url =
-        URL.createObjectURL(blob);
+        const r = new FileReader();
 
-    const a =
-        document.createElement("a");
+        r.onload = () =>
+            ok(String(r.result).split(",")[1] || "");
 
-    a.href = url;
-    a.download = namaFile;
+        r.onerror = () => gagal(r.error);
 
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+        r.readAsDataURL(blob);
+    });
+}
 
-    setTimeout(
-        () => URL.revokeObjectURL(url),
-        2000
-    );
+/*
+   Mengembalikan true jika file berhasil diserahkan ke
+   perangkat, false jika dibatalkan / gagal.
+   Urutan: Capacitor -> jembatan Android (WebView) ->
+   menu Bagikan HP -> unduhan browser biasa.
+*/
+async function unduhFile(bytes,namaFile,tipe){
+
+    const blob = new Blob([bytes],{type:tipe});
+    const cap = window.Capacitor;
+    const jembatan = window.AndroidBridge || window.Android;
+
+    try{
+
+        /* 1. Aplikasi Capacitor */
+        if(
+            cap &&
+            (cap.isNativePlatform ? cap.isNativePlatform() : cap.isNative) &&
+            cap.Plugins && cap.Plugins.Filesystem
+        ){
+
+            const data = await blobKeBase64(blob);
+
+            const hasil =
+                await cap.Plugins.Filesystem.writeFile({
+                    path:namaFile,
+                    data:data,
+                    directory:cap.Plugins.Share ? "CACHE" : "DOCUMENTS"
+                });
+
+            if(cap.Plugins.Share){
+
+                try{
+                    await cap.Plugins.Share.share({
+                        title:namaFile,
+                        url:hasil.uri,
+                        dialogTitle:"Simpan / bagikan file"
+                    });
+                }catch(e){
+                    return false; /* dibatalkan pengguna */
+                }
+            }
+
+            return true;
+        }
+
+        /* 2. WebView dengan jembatan Android (JavascriptInterface) */
+        if(jembatan && typeof jembatan.saveFile === "function"){
+
+            const data = await blobKeBase64(blob);
+
+            jembatan.saveFile(data,namaFile,tipe);
+
+            return true;
+        }
+
+        /* 3. Menu Bagikan bawaan HP (Web Share API) */
+        if(typeof File === "function" && navigator.canShare){
+
+            const berkas =
+                new File([blob],namaFile,{type:tipe});
+
+            if(navigator.canShare({files:[berkas]})){
+
+                try{
+                    await navigator.share({
+                        files:[berkas],
+                        title:namaFile
+                    });
+                    return true;
+                }catch(e){
+                    if(e && e.name === "AbortError"){
+                        return false;
+                    }
+                }
+            }
+        }
+
+        /* 4. Browser biasa */
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+
+        a.href = url;
+        a.download = namaFile;
+
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        setTimeout(
+            () => URL.revokeObjectURL(url),
+            2000
+        );
+
+        return true;
+
+    }catch(err){
+
+        tampilkanPeringatan(
+            "File gagal disimpan: " + (err && err.message ? err.message : err),
+            "Gagal Mengunduh"
+        );
+
+        return false;
+    }
 }
 
 function namaFileLaporan(ekstensi){
@@ -5489,7 +5879,7 @@ function infoEkspor(){
     };
 }
 
-function eksporExcel(){
+async function eksporExcel(){
 
     const data = ambilDataLaporan();
 
@@ -5503,11 +5893,13 @@ function eksporExcel(){
         return;
     }
 
-    unduhFile(
+    const berhasil = await unduhFile(
         buatFileExcel(barisLaporan(data),infoEkspor()),
         namaFileLaporan("xlsx"),
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     );
+
+    if(!berhasil) return;
 
     tampilkanPesan(
         "Laporan berhasil diekspor ke Excel.",
@@ -5516,7 +5908,7 @@ function eksporExcel(){
     );
 }
 
-function eksporPDF(){
+async function eksporPDF(){
 
     const data = ambilDataLaporan();
 
@@ -5530,11 +5922,13 @@ function eksporPDF(){
         return;
     }
 
-    unduhFile(
+    const berhasil = await unduhFile(
         buatFilePDF(barisLaporan(data),infoEkspor()),
         namaFileLaporan("pdf"),
         "application/pdf"
     );
+
+    if(!berhasil) return;
 
     tampilkanPesan(
         "Laporan berhasil diekspor ke PDF.",
@@ -6849,7 +7243,7 @@ function bacaDataBackup(){
     return data;
 }
 
-function unduhBackup(){
+async function unduhBackup(){
 
     const sekarang = new Date();
 
@@ -6866,11 +7260,13 @@ function unduhBackup(){
         data:bacaDataBackup()
     };
 
-    unduhFile(
+    const berhasil = await unduhFile(
         JSON.stringify(isi,null,2),
         `backup-catatan-produksi_${stempel}.json`,
         "application/json"
     );
+
+    if(!berhasil) return;
 
     tampilkanPesan(
         "File backup berhasil dibuat. Simpan file tersebut di tempat yang aman.",
