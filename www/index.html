@@ -214,6 +214,7 @@ input:focus{
     max-height:340px;
     overflow-y:auto;
     -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
 }
 
 .item-produksi{
@@ -665,6 +666,16 @@ input:focus{
 
 .table-wrapper{
     overflow-x:auto;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+}
+
+.table-wrapper thead th{
+    position:sticky;
+    top:0;
+    z-index:1;
+    box-shadow:0 1px 0 #e5e7eb;
 }
 
 table{
@@ -689,6 +700,159 @@ th{
     color:#9ca3af;
     padding:25px 10px;
     font-size:calc(13px * var(--skala-teks));
+}
+
+/* ===== HALAMAN SAMBUTAN ===== */
+
+.sambutan{
+    position:fixed;
+    inset:0;
+    z-index:950;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    overflow:hidden;
+    color:white;
+    background:linear-gradient(155deg,#312e81 0%,#4f46e5 45%,#7c3aed 100%);
+}
+
+.sambutan.hide{
+    display:none;
+}
+
+.sambutan::before,
+.sambutan::after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    pointer-events:none;
+}
+
+.sambutan::before{
+    width:320px;
+    height:320px;
+    top:-110px;
+    right:-100px;
+    background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.28),rgba(255,255,255,0) 70%);
+}
+
+.sambutan::after{
+    width:380px;
+    height:380px;
+    bottom:-150px;
+    left:-130px;
+    background:radial-gradient(circle at 60% 40%,rgba(167,139,250,.55),rgba(167,139,250,0) 70%);
+}
+
+.sambutan-box{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:360px;
+    text-align:center;
+    animation:sambutanMasuk .55s ease both;
+}
+
+@keyframes sambutanMasuk{
+    from{
+        opacity:0;
+        transform:translateY(22px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.sambutan-logo{
+    width:96px;
+    height:96px;
+    margin:0 auto 24px;
+    border-radius:30px;
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:calc(48px * var(--skala-teks));
+    box-shadow:0 14px 34px rgba(30,27,75,.35);
+    animation:sambutanMelayang 3.2s ease-in-out infinite;
+}
+
+@keyframes sambutanMelayang{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-8px)}
+}
+
+.sambutan-judul{
+    font-size:calc(30px * var(--skala-teks));
+    font-weight:800;
+    line-height:1.15;
+    letter-spacing:-.3px;
+    margin-bottom:12px;
+}
+
+.sambutan-judul span{
+    display:block;
+}
+
+.sambutan-judul .aksen{
+    color:#fde68a;
+}
+
+.sambutan-sub{
+    font-size:calc(14px * var(--skala-teks));
+    line-height:1.55;
+    opacity:.85;
+    margin-bottom:38px;
+}
+
+.sambutan-btn{
+    width:100%;
+    height:54px;
+    border:none;
+    border-radius:16px;
+    font-size:calc(15px * var(--skala-teks));
+    font-weight:bold;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    -webkit-tap-highlight-color:transparent;
+    transition:transform .12s ease;
+}
+
+.sambutan-btn:active{
+    transform:scale(.97);
+}
+
+.sambutan-btn.utama{
+    background:white;
+    color:#4f46e5;
+    box-shadow:0 12px 28px rgba(30,27,75,.35);
+    margin-bottom:12px;
+}
+
+.sambutan-btn.kedua{
+    background:rgba(255,255,255,.14);
+    color:white;
+    border:1px solid rgba(255,255,255,.4);
+}
+
+@media(max-height:640px){
+
+    .sambutan-logo{
+        width:72px;
+        height:72px;
+        margin-bottom:16px;
+        border-radius:22px;
+    }
+
+    .sambutan-sub{
+        margin-bottom:24px;
+    }
 }
 
 /* ===== LOGIN / KUNCI ===== */
@@ -907,9 +1071,8 @@ th{
 
 .fab-tambah{
     position:fixed;
-    left:50%;
+    right:calc(max(0px, 50vw - 350px) + 14px);
     bottom:84px;
-    transform:translateX(-50%);
     z-index:101;
     display:flex;
     align-items:center;
@@ -927,7 +1090,7 @@ th{
 }
 
 .fab-tambah:active{
-    transform:translateX(-50%) scale(.94);
+    transform:scale(.94);
     box-shadow:0 4px 12px rgba(79,70,229,.4);
 }
 
@@ -1107,9 +1270,11 @@ function terapkanUkuranTulisan(){
         input.value = manual !== null ? manual : "";
     }
 
-    if(typeof batasiTinggiDaftarProduksi === "function"){
-        requestAnimationFrame(batasiTinggiDaftarProduksi);
-    }
+    requestAnimationFrame(() => {
+
+        aturTinggiDaftarProduksi();
+        aturTinggiTabelLaporan();
+    });
 }
 
 function pilihUkuranTulisan(nilai){
@@ -1347,6 +1512,30 @@ document.addEventListener(
                 📊 Ekspor Excel
 
             </button>
+
+        </div>
+
+        <div class="form-group" style="margin-top:14px">
+
+            <label>Urutkan Laporan</label>
+
+            <select
+                id="urutLaporan"
+                onchange="ubahUrutLaporan()">
+
+                <option value="tanggal-baru">📅 Tanggal: terbaru → terlama</option>
+                <option value="tanggal-lama">📅 Tanggal: terlama → terbaru</option>
+                <option value="kandang-banyak">🏠 Kandang / Sekat: terbanyak → tersedikit</option>
+                <option value="kandang-sedikit">🏠 Kandang / Sekat: tersedikit → terbanyak</option>
+                <option value="jumlah-besar">🔢 Jumlah: terbesar → terkecil</option>
+                <option value="jumlah-kecil">🔢 Jumlah: terkecil → terbesar</option>
+
+            </select>
+
+            <small
+                id="infoUrutLaporan"
+                style="display:none;margin-top:6px;opacity:.75;line-height:1.5">
+            </small>
 
         </div>
 
@@ -2675,6 +2864,76 @@ document.addEventListener(
     Tambah
 
 </button>
+
+
+<!-- =====================================================
+     HALAMAN SAMBUTAN
+===================================================== -->
+
+<div id="layarSambutan" class="sambutan">
+
+    <div class="sambutan-box">
+
+        <div id="panelSambutan">
+
+            <div class="sambutan-logo">🥚</div>
+
+            <h1 class="sambutan-judul">
+                <span>Catatan Produksi</span>
+                <span class="aksen">Ternak</span>
+            </h1>
+
+            <p class="sambutan-sub">
+                Catat hasil produksi harian dengan mudah,
+                dan tersimpan aman di perangkat Anda.
+            </p>
+
+            <button
+                class="sambutan-btn utama"
+                onclick="masukLoginPin()">
+
+                <span>🔐</span>
+                Login dengan PIN
+
+            </button>
+
+            <button
+                class="sambutan-btn kedua"
+                onclick="keluarAplikasi()">
+
+                <span>🚪</span>
+                Keluar
+
+            </button>
+
+        </div>
+
+        <div id="panelKeluar" style="display:none">
+
+            <div class="sambutan-logo">👋</div>
+
+            <h1 class="sambutan-judul">
+                <span>Sampai Jumpa</span>
+            </h1>
+
+            <p class="sambutan-sub">
+                Anda sudah keluar. Silakan tutup halaman ini,
+                atau buka kembali kapan saja.
+            </p>
+
+            <button
+                class="sambutan-btn utama"
+                onclick="bukaKembaliSambutan()">
+
+                Buka Kembali
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
 
 <!-- =====================================================
@@ -4716,7 +4975,238 @@ function tambahCatatan(){
    TAMPILKAN PRODUKSI
 ===================================================== */
 
+/* =====================================================
+   PENCARIAN DAFTAR PRODUKSI
+   - "tanggal 1" / "tgl 1"  : hanya tanggal 1 (bukan jumlah 1)
+   - "sekat 1"              : hanya Sekat 1 (bukan Sekat 10)
+   - "120"                  : jumlah tepat 120
+   - "01/10/2026", "2026-10-01", "10/2026", "bulan 10", "tahun 2026"
+   Beberapa syarat bisa digabung, contoh: "tanggal 1 sekat 1".
+===================================================== */
+
+function buatPencarianProduksi(teksMentah){
+
+    let q =
+        String(teksMentah || "")
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g," ");
+
+    if(!q){
+        return () => true;
+    }
+
+    const syarat = [];
+
+    const bagian = item => {
+
+        const b =
+            String(item.tanggal || "").split("-");
+
+        return {
+            th:parseInt(b[0],10) || 0,
+            bl:parseInt(b[1],10) || 0,
+            tg:parseInt(b[2],10) || 0
+        };
+    };
+
+    const ambil = (regex,fungsi) => {
+
+        q = q.replace(regex,(...a) => {
+
+            syarat.push(fungsi(...a));
+
+            return " ";
+        });
+    };
+
+    /* tanggal lengkap */
+    ambil(
+        /(^|[^0-9])(\d{4})-(\d{1,2})-(\d{1,2})(?![0-9])/,
+        (_,x,y,mo,d) => item => {
+            const t = bagian(item);
+            return t.th === +y && t.bl === +mo && t.tg === +d;
+        }
+    );
+
+    ambil(
+        /(^|[^0-9])(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})(?![0-9])/,
+        (_,x,d,mo,y) => item => {
+            const t = bagian(item);
+            return t.th === +y && t.bl === +mo && t.tg === +d;
+        }
+    );
+
+    /* bulan + tahun */
+    ambil(
+        /(^|[^0-9])(\d{4})-(\d{1,2})(?![0-9\-])/,
+        (_,x,y,mo) => item => {
+            const t = bagian(item);
+            return t.th === +y && t.bl === +mo;
+        }
+    );
+
+    ambil(
+        /(^|[^0-9])(\d{1,2})[\/\-](\d{4})(?![0-9])/,
+        (_,x,mo,y) => item => {
+            const t = bagian(item);
+            return t.th === +y && t.bl === +mo;
+        }
+    );
+
+    /* kata kunci tanggal / bulan / tahun */
+    ambil(
+        /(^|\s)(?:tanggal|tgl)\s*(\d{1,2})(?![0-9])/,
+        (_,x,d) => item => bagian(item).tg === +d
+    );
+
+    ambil(
+        /(^|\s)bulan\s*(\d{1,2})(?![0-9])/,
+        (_,x,mo) => item => bagian(item).bl === +mo
+    );
+
+    ambil(
+        /(^|\s)tahun\s*(\d{4})(?![0-9])/,
+        (_,x,y) => item => bagian(item).th === +y
+    );
+
+    q = q.replace(/\s+/g," ").trim();
+
+    /* sisa teks: nama kandang / sekat dan jumlah */
+    if(q){
+
+        const esc = t =>
+            t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+
+        const kosakata =
+            [...new Set(
+                [
+                    ...daftarKategoriKandang,
+                    ...dataAktif().map(d => d.kandang)
+                ]
+                .filter(Boolean)
+                .map(k => String(k).toLowerCase())
+            )]
+            .sort((a,b) => b.length - a.length);
+
+        let nama = null;
+
+        for(const k of kosakata){
+
+            const re =
+                new RegExp(
+                    "(^|[^a-z0-9])" + esc(k) + "($|[^a-z0-9])"
+                );
+
+            if(re.test(q)){
+
+                nama = k;
+
+                q = q.replace(re," ")
+                     .replace(/\s+/g," ")
+                     .trim();
+
+                break;
+            }
+        }
+
+        if(nama){
+
+            syarat.push(
+                item =>
+                    String(item.kandang || "").toLowerCase() === nama
+            );
+        }
+
+        const token =
+            q.split(" ").filter(Boolean);
+
+        const angka = /^\d+([.,]\d+)?$/;
+
+        if(token.length > 0){
+
+            if(token.every(t => angka.test(t))){
+
+                token.forEach(t => {
+
+                    const n = Number(t.replace(",","."));
+
+                    syarat.push(
+                        item => Number(item.jumlah) === n
+                    );
+                });
+
+            }else if(nama){
+
+                /* ada kata lain yang tidak dikenali */
+                syarat.push(() => false);
+
+            }else{
+
+                /* ketikan sebagian nama kandang / sekat, mis. "sekat" atau "sekat 1" */
+                const frasa = token.join(" ");
+
+                const re =
+                    new RegExp(
+                        "(^|[^a-z0-9])" + esc(frasa) +
+                        (/\d$/.test(frasa) ? "(?![a-z0-9])" : "")
+                    );
+
+                syarat.push(
+                    item =>
+                        re.test(String(item.kandang || "").toLowerCase())
+                );
+            }
+        }
+    }
+
+    return item => syarat.every(f => f(item));
+}
+
+function aturTinggiDaftarProduksi(){
+
+    const halaman =
+        document.getElementById("halamanDashboard");
+
+    const daftar =
+        document.getElementById("daftarProduksi");
+
+    if(
+        !halaman ||
+        !daftar ||
+        !halaman.classList.contains("aktif")
+    ){
+        return;
+    }
+
+    daftar.style.maxHeight = "none";
+
+    /* posisi daftar pada halaman, tidak tergantung sedang digulir atau tidak */
+    const atas =
+        daftar.getBoundingClientRect().top +
+        (window.pageYOffset || 0);
+
+    /* 72px navigasi bawah + padding kartu + sedikit jarak */
+    const sisa =
+        window.innerHeight - atas - 102;
+
+    daftar.style.maxHeight =
+        Math.max(180,sisa) + "px";
+}
+
+window.addEventListener(
+    "resize",
+    aturTinggiDaftarProduksi
+);
+
+window.addEventListener(
+    "load",
+    aturTinggiDaftarProduksi
+);
+
 function tampilkanCatatan(){
+
+    aturTinggiDaftarProduksi();
 
     const container =
         document.getElementById(
@@ -4725,15 +5215,12 @@ function tampilkanCatatan(){
 
     const data = dataAktif();
 
-    const kataKunci =
-        (document.getElementById("cariProduksi")?.value || "")
-        .trim()
-        .toLowerCase()
-        .split(/\s+/)
-        .filter(Boolean);
+    const cocokCari =
+        buatPencarianProduksi(
+            document.getElementById("cariProduksi")?.value || ""
+        );
 
     container.innerHTML = "";
-    container.style.maxHeight = "none";
 
     if(data.length === 0){
 
@@ -4752,21 +5239,7 @@ function tampilkanCatatan(){
             item:item,
             index:index
         }))
-        .filter(({item}) => {
-
-            if(kataKunci.length === 0) return true;
-
-            const teks = [
-                item.tanggal,
-                formatTanggal(item.tanggal),
-                item.kandang,
-                item.jumlah
-            ]
-            .map(v => String(v ?? "").toLowerCase())
-            .join(" ");
-
-            return kataKunci.every(k => teks.includes(k));
-        })
+        .filter(({item}) => cocokCari(item))
         .sort((a,b) => {
 
             const tanggalA =
@@ -4894,54 +5367,7 @@ function tampilkanCatatan(){
         container.appendChild(div);
     });
 
-    batasiTinggiDaftarProduksi();
 }
-
-/* Tampilkan 3 catatan saja, sisanya digulir di dalam daftar */
-const JUMLAH_CATATAN_TERLIHAT = 3;
-
-function batasiTinggiDaftarProduksi(){
-
-    const container =
-        document.getElementById("daftarProduksi");
-
-    if(!container) return;
-
-    const items =
-        container.querySelectorAll(".item-produksi");
-
-    if(items.length <= JUMLAH_CATATAN_TERLIHAT){
-
-        container.style.maxHeight = "none";
-
-        return;
-    }
-
-    const pertama = items[0];
-
-    const terakhir =
-        items[JUMLAH_CATATAN_TERLIHAT - 1];
-
-    const tinggi =
-        terakhir.offsetTop +
-        terakhir.offsetHeight -
-        pertama.offsetTop;
-
-    /* halaman tersembunyi: pakai batas bawaan dari CSS */
-    if(tinggi <= 0){
-
-        container.style.maxHeight = "";
-
-        return;
-    }
-
-    container.style.maxHeight = (tinggi + 2) + "px";
-}
-
-window.addEventListener(
-    "resize",
-    batasiTinggiDaftarProduksi
-);
 
 
 /* =====================================================
@@ -5322,22 +5748,232 @@ function cocokFilterLaporan(item){
    EKSPOR LAPORAN (PDF & EXCEL) - TANPA INTERNET
 ===================================================== */
 
-function ambilDataLaporan(){
+let urutLaporanAktif = "tanggal-baru";
 
-    return dataAktif()
-        .filter(item => cocokFilterLaporan(item))
-        .sort((a,b) => {
+function bandingTanggalJam(a,b,arah){
 
-            const tanggalA = a.tanggal || "";
-            const tanggalB = b.tanggal || "";
+    /* arah: -1 = terbaru dulu, 1 = terlama dulu */
 
-            if(tanggalA !== tanggalB){
-                return tanggalB.localeCompare(tanggalA);
+    const tA = a.tanggal || "";
+    const tB = b.tanggal || "";
+
+    if(tA !== tB){
+        return arah * tA.localeCompare(tB);
+    }
+
+    return arah * (a.jam || "00:00")
+        .localeCompare(b.jam || "00:00");
+}
+
+function totalPerKandang(daftar){
+
+    const total = {};
+
+    daftar.forEach(item => {
+
+        const nama = item.kandang || "-";
+
+        total[nama] =
+            (total[nama] || 0) +
+            (Number(item.jumlah) || 0);
+    });
+
+    return total;
+}
+
+function urutkanLaporan(daftar){
+
+    const mode = urutLaporanAktif;
+
+    const hasil = [...daftar];
+
+    if(mode === "tanggal-lama"){
+
+        return hasil.sort(
+            (a,b) => bandingTanggalJam(a,b,1)
+        );
+    }
+
+    if(
+        mode === "kandang-banyak" ||
+        mode === "kandang-sedikit"
+    ){
+
+        const total = totalPerKandang(hasil);
+
+        const arah =
+            mode === "kandang-banyak" ? -1 : 1;
+
+        return hasil.sort((a,b) => {
+
+            const namaA = a.kandang || "-";
+            const namaB = b.kandang || "-";
+
+            if(namaA !== namaB){
+
+                if(total[namaA] !== total[namaB]){
+                    return arah *
+                        (total[namaA] - total[namaB]);
+                }
+
+                /* total sama: urut nama agar grup tidak tercampur */
+                return namaA.localeCompare(
+                    namaB,"id",{numeric:true}
+                );
             }
 
-            return (b.jam || "00:00")
-                .localeCompare(a.jam || "00:00");
+            /* dalam satu kandang: tanggal terbaru dulu */
+            return bandingTanggalJam(a,b,-1);
         });
+    }
+
+    if(
+        mode === "jumlah-besar" ||
+        mode === "jumlah-kecil"
+    ){
+
+        const arah =
+            mode === "jumlah-besar" ? -1 : 1;
+
+        return hasil.sort((a,b) => {
+
+            const selisih =
+                (Number(a.jumlah) || 0) -
+                (Number(b.jumlah) || 0);
+
+            if(selisih !== 0){
+                return arah * selisih;
+            }
+
+            return bandingTanggalJam(a,b,-1);
+        });
+    }
+
+    /* default: tanggal terbaru -> terlama */
+    return hasil.sort(
+        (a,b) => bandingTanggalJam(a,b,-1)
+    );
+}
+
+function ubahUrutLaporan(){
+
+    urutLaporanAktif =
+        document.getElementById(
+            "urutLaporan"
+        ).value;
+
+    tampilkanLaporan();
+}
+
+function teksTotalKeseluruhan(daftar){
+
+    /* jumlah seluruh baris, dipisah per satuan agar tidak tercampur */
+
+    if(daftar.length === 0) return "";
+
+    const total = {};
+
+    daftar.forEach(item => {
+
+        const satuan = (item.satuan || "").trim();
+
+        total[satuan] =
+            (total[satuan] || 0) +
+            (Number(item.jumlah) || 0);
+    });
+
+    return "Total keseluruhan: " +
+        Object.keys(total)
+            .map(satuan =>
+                (formatAngka(total[satuan]) + " " + satuan).trim()
+            )
+            .join(" · ");
+}
+
+function teksTotalKandang(daftar,selalu){
+
+    /* di layar hanya saat urutan kandang / sekat dipilih;
+       di ekspor (selalu = true) tampil pada semua urutan */
+
+    if(
+        daftar.length === 0 ||
+        (!selalu && !urutLaporanAktif.startsWith("kandang"))
+    ){
+        return "";
+    }
+
+    const total = totalPerKandang(daftar);
+
+    const arah =
+        urutLaporanAktif === "kandang-sedikit" ? 1 : -1;
+
+    /* rincian satuan hanya dipakai jika satuannya campuran */
+
+    const daftarSatuan = new Set(
+        daftar.map(item => (item.satuan || "").trim())
+    );
+
+    const rinci = {};
+
+    if(daftarSatuan.size > 1){
+
+        daftar.forEach(item => {
+
+            const nama = item.kandang || "-";
+            const satuan = (item.satuan || "").trim();
+
+            rinci[nama] = rinci[nama] || {};
+
+            rinci[nama][satuan] =
+                (rinci[nama][satuan] || 0) +
+                (Number(item.jumlah) || 0);
+        });
+    }
+
+    const tulisTotal = nama => {
+
+        if(daftarSatuan.size > 1){
+
+            return Object.keys(rinci[nama])
+                .map(st =>
+                    (formatAngka(rinci[nama][st]) + " " + st).trim()
+                )
+                .join(", ");
+        }
+
+        return formatAngka(total[nama]);
+    };
+
+    return "Total jumlah: " +
+        Object.keys(total)
+            .sort((x,y) =>
+                arah * (total[x] - total[y]) ||
+                x.localeCompare(y,"id",{numeric:true})
+            )
+            .map(n => `${n} (${tulisTotal(n)})`)
+            .join(" · ");
+}
+
+function perbaruiInfoUrutLaporan(daftar){
+
+    const info =
+        document.getElementById("infoUrutLaporan");
+
+    if(!info) return;
+
+    const teks = teksTotalKandang(daftar);
+
+    info.textContent = teks;
+    info.style.display = teks ? "block" : "none";
+}
+
+function ambilDataLaporan(){
+
+    return urutkanLaporan(
+        dataAktif().filter(
+            item => cocokFilterLaporan(item)
+        )
+    );
 }
 
 function labelPeriodeLaporan(){
@@ -5751,7 +6387,21 @@ function buatFileExcel(baris,info){
     r++;
 
     rows.push(`<row r="${r}">${selExcel(0,r,"Dicetak: " + info.waktu,false)}</row>`);
-    r += 2;
+    r++;
+
+    if(info.totalKandang){
+
+        rows.push(`<row r="${r}">${selExcel(0,r,info.totalKandang,true)}</row>`);
+        r++;
+    }
+
+    if(info.totalSemua){
+
+        rows.push(`<row r="${r}">${selExcel(0,r,info.totalSemua,true)}</row>`);
+        r++;
+    }
+
+    r++;
 
     rows.push(
         `<row r="${r}">` +
@@ -5900,7 +6550,48 @@ function buatFilePDF(baris,info){
     y -= 14;
 
     tulis(M,y,"Dicetak: " + info.waktu,false,10);
-    y -= 26;
+    y -= 14;
+
+    if(info.totalKandang){
+
+        /* bungkus per kandang agar tidak melewati tepi halaman */
+        const potongan = info.totalKandang.split(" · ");
+        const barisTotal = [];
+        let sekarang = "";
+
+        potongan.forEach(bagian => {
+
+            const calon = sekarang
+                ? sekarang + " · " + bagian
+                : bagian;
+
+            if(calon.length > 85 && sekarang){
+
+                barisTotal.push(sekarang + " ·");
+                sekarang = bagian;
+
+            }else{
+
+                sekarang = calon;
+            }
+        });
+
+        barisTotal.push(sekarang);
+
+        barisTotal.forEach(teks => {
+
+            tulis(M,y,teks,true,10);
+            y -= 14;
+        });
+    }
+
+    if(info.totalSemua){
+
+        tulis(M,y,info.totalSemua,true,10);
+        y -= 14;
+    }
+
+    y -= 12;
 
     judulKolom();
 
@@ -6011,10 +6702,14 @@ function buatFilePDF(baris,info){
 
 function infoEkspor(){
 
+    const data = ambilDataLaporan();
+
     return {
         pembukuan:pembukuanAktif,
         periode:labelPeriodeLaporan(),
-        waktu:waktuCetak()
+        waktu:waktuCetak(),
+        totalSemua:teksTotalKeseluruhan(data),
+        totalKandang:teksTotalKandang(data,true)
     };
 }
 
@@ -6081,7 +6776,45 @@ async function eksporPDF(){
    LAPORAN
 ===================================================== */
 
+function aturTinggiTabelLaporan(){
+
+    const halaman =
+        document.getElementById("halamanLaporan");
+
+    const wrapper =
+        document.querySelector(
+            "#halamanLaporan .table-wrapper"
+        );
+
+    if(
+        !halaman ||
+        !wrapper ||
+        !halaman.classList.contains("aktif")
+    ){
+        return;
+    }
+
+    wrapper.style.maxHeight = "none";
+
+    const atas =
+        wrapper.getBoundingClientRect().top;
+
+    /* 72px navigasi bawah + padding kartu + sedikit jarak */
+    const sisa =
+        window.innerHeight - atas - 102;
+
+    wrapper.style.maxHeight =
+        Math.max(180,sisa) + "px";
+}
+
+window.addEventListener(
+    "resize",
+    aturTinggiTabelLaporan
+);
+
 function tampilkanLaporan(){
+
+    aturTinggiTabelLaporan();
 
     const tbody =
         document.getElementById(
@@ -6095,6 +6828,8 @@ function tampilkanLaporan(){
     tbody.innerHTML = "";
 
     if(data.length === 0){
+
+        perbaruiInfoUrutLaporan([]);
 
         tbody.innerHTML = `
             <tr>
@@ -6112,37 +6847,15 @@ function tampilkanLaporan(){
     }
 
     const dataUrut =
-        data
-        .map((item,index) => ({
-            item:item,
-            index:index
-        }))
-        .filter(({item}) => cocokFilterLaporan(item))
-        .sort((a,b) => {
+        urutkanLaporan(
+            data.filter(
+                item => cocokFilterLaporan(item)
+            )
+        ).map(item => ({item:item}));
 
-            const tanggalA =
-                a.item.tanggal || "";
-
-            const tanggalB =
-                b.item.tanggal || "";
-
-            if(tanggalA !== tanggalB){
-
-                return tanggalB.localeCompare(
-                    tanggalA
-                );
-            }
-
-            const jamA =
-                a.item.jam || "00:00";
-
-            const jamB =
-                b.item.jam || "00:00";
-
-            return jamB.localeCompare(
-                jamA
-            );
-        });
+    perbaruiInfoUrutLaporan(
+        dataUrut.map(x => x.item)
+    );
 
     if(dataUrut.length === 0){
 
@@ -7211,9 +7924,7 @@ function kunciSekarang(){
 
     tampilkanLayarKunci("login");
 
-    if(KUNCI.bioDidukung && localStorage.getItem("biometrikId")){
-        loginBiometrik();
-    }
+    tampilkanSambutan();
 }
 
 /* ---------- Lupa PIN ---------- */
@@ -7248,6 +7959,96 @@ function hapusSemuaDataAplikasi(){
     location.reload();
 }
 
+/* ---------- Halaman sambutan ---------- */
+
+function sambutanTampil(){
+
+    const el = elKunci("layarSambutan");
+
+    return !!el && !el.classList.contains("hide");
+}
+
+function tampilkanSambutan(){
+
+    elKunci("layarSambutan").classList.remove("hide");
+
+    elKunci("panelSambutan").style.display = "block";
+    elKunci("panelKeluar").style.display = "none";
+}
+
+function masukLoginPin(){
+
+    elKunci("layarSambutan").classList.add("hide");
+
+    if(
+        KUNCI.mode === "login" &&
+        KUNCI.bioDidukung &&
+        localStorage.getItem("biometrikId")
+    ){
+
+        loginBiometrik();
+    }
+}
+
+function kembaliKeSambutan(){
+
+    if(sessionStorage.getItem("sesiLogin") === "1"){
+
+        bukaKunci();
+
+        return;
+    }
+
+    KUNCI.pinSementara = "";
+
+    tampilkanLayarKunci(
+        adaPin() ? "login" : "buat"
+    );
+
+    tampilkanSambutan();
+}
+
+function keluarAplikasi(){
+
+    sessionStorage.removeItem("sesiLogin");
+
+    try{
+
+        const cap = window.Capacitor;
+
+        if(
+            cap &&
+            cap.Plugins &&
+            cap.Plugins.App &&
+            cap.Plugins.App.exitApp
+        ){
+
+            cap.Plugins.App.exitApp();
+
+            return;
+        }
+
+    }catch(e){}
+
+    try{
+        window.close();
+    }catch(e){}
+
+    /* Browser biasanya menolak menutup tab sendiri: tampilkan layar perpisahan */
+    setTimeout(() => {
+
+        elKunci("panelSambutan").style.display = "none";
+        elKunci("panelKeluar").style.display = "block";
+
+    },250);
+}
+
+function bukaKembaliSambutan(){
+
+    elKunci("panelKeluar").style.display = "none";
+    elKunci("panelSambutan").style.display = "block";
+}
+
 /* ---------- Mulai ---------- */
 
 async function inisialisasiKunci(){
@@ -7258,6 +8059,8 @@ async function inisialisasiKunci(){
     ){
 
         sembunyikanLayarKunci();
+
+        elKunci("layarSambutan").classList.add("hide");
     }
 
     const perluLogin =
@@ -7277,14 +8080,7 @@ async function inisialisasiKunci(){
 
     perbaruiTombolBiometrikKunci();
 
-    if(
-        KUNCI.mode === "login" &&
-        KUNCI.bioDidukung &&
-        localStorage.getItem("biometrikId")
-    ){
-
-        loginBiometrik();
-    }
+    /* Prompt biometrik muncul setelah tombol "Login dengan PIN" ditekan */
 }
 
 document.addEventListener(
@@ -7296,6 +8092,7 @@ document.addEventListener(
     if(
         !overlay ||
         overlay.classList.contains("hide") ||
+        sambutanTampil() ||
         elKunci("panelPin").style.display === "none" ||
         document.querySelector(".modal-overlay.show")
     ){
@@ -7632,6 +8429,12 @@ function halamanAktifId(){
 /* Mengembalikan true jika ada sesuatu yang berhasil ditutup / dikembalikan */
 function tanganiTombolKembali(){
 
+    /* 0. Halaman sambutan: tombol kembali = keluar dari aplikasi */
+    if(sambutanTampil()){
+
+        return false;
+    }
+
     /* 1. Layar kunci / login */
     const kunci = elKunci("layarKunci");
 
@@ -7644,8 +8447,10 @@ function tanganiTombolKembali(){
             return true;
         }
 
-        /* layar login / buat PIN: keluar dari aplikasi */
-        return false;
+        /* layar login / buat PIN: kembali ke halaman sambutan */
+        kembaliKeSambutan();
+
+        return true;
     }
 
     /* 2. Popup yang sedang terbuka (dari yang paling atas) */
