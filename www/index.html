@@ -1278,6 +1278,11 @@ th{
     transition:transform .15s ease, box-shadow .15s ease;
 }
 
+.fab-keluar{
+    left:calc(max(0px, 50vw - 350px) + 14px);
+    right:auto;
+}
+
 .fab-tambah:active{
     transform:scale(.94);
     box-shadow:0 4px 12px rgba(0,0,0,.18);
@@ -3332,6 +3337,17 @@ document.addEventListener(
 
 </button>
 
+<button
+    id="btnFabKeluar"
+    class="fab-tambah fab-keluar"
+    onclick="kunciSekarang()"
+    aria-label="Keluar ke halaman login">
+
+    <span class="fab-plus">-</span>
+    Keluar
+
+</button>
+
 
 <!-- =====================================================
      HALAMAN SAMBUTAN
@@ -3799,6 +3815,13 @@ function aturTombolTambah(tampil){
         ?.classList.toggle("sembunyi", !tampil);
 }
 
+function aturTombolKeluar(tampil){
+
+    document
+        .getElementById("btnFabKeluar")
+        ?.classList.toggle("sembunyi", !tampil);
+}
+
 /* =====================================================
    NAVIGASI
 ===================================================== */
@@ -3809,6 +3832,7 @@ function bukaHalaman(halaman){
         halaman === "dashboard" ||
         halaman === "laporan"
     );
+    aturTombolKeluar(halaman === "dashboard");
 
     document
         .querySelectorAll(".halaman")
@@ -3866,6 +3890,7 @@ function kembaliKePengaturan(){
 function tampilkanHalamanInternal(id){
 
     aturTombolTambah(false);
+    aturTombolKeluar(false);
 
     document
         .querySelectorAll(".halaman")
