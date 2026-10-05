@@ -16,6 +16,7 @@
 :root{
     --skala-teks:1;
     --skala-angka:1;
+    --warna-latar-aplikasi:#f4f6f8;
 }
 
 button,
@@ -27,7 +28,7 @@ textarea{
 body{
     font-size:calc(16px * var(--skala-teks));
     font-family:Arial,Helvetica,sans-serif;
-    background:#f4f6f8;
+    background:var(--warna-latar-aplikasi);
     color:#1f2937;
     padding-bottom:85px;
 }
@@ -35,10 +36,39 @@ body{
 .halaman{
     display:none;
     min-height:calc(100vh - 85px);
+    background:var(--warna-latar-aplikasi);
 }
 
 .halaman.aktif{
     display:block;
+}
+
+.halaman.latar-utama{
+    background:var(--warna-latar-tema,
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(196,181,253,.28) 0,
+            rgba(196,181,253,0) 30%
+        ),
+        radial-gradient(
+            circle at 0% 75%,
+            rgba(129,140,248,.22) 0,
+            rgba(129,140,248,0) 34%
+        ),
+        linear-gradient(160deg,#4338ca 0%,#5b35d5 52%,#6d28d9 100%)
+    );
+}
+
+.halaman.latar-utama .header{
+    color:var(--warna-teks-tema,white);
+}
+
+.halaman.latar-utama .header p{
+    color:var(--warna-subteks-tema,rgba(255,255,255,.78));
+}
+
+.halaman.latar-utama .header strong{
+    color:var(--warna-teks-tema,white);
 }
 
 .container{
@@ -138,6 +168,14 @@ input:focus{
     cursor:pointer;
 }
 
+.btn-ekspor,
+.btn-tema,
+.btn-cancel.btn-tema,
+.btn-tambah.btn-tema{
+    background:var(--warna-latar-tema,#4f46e5);
+    color:var(--warna-teks-tema,white);
+}
+
 .btn-primary:active,
 .btn-danger-confirm:active,
 .btn-cancel:active{
@@ -192,22 +230,41 @@ input:focus{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:12px;
+    gap:12px;
+    margin-bottom:15px;
 }
 
 .judul-list h2{
     font-size:calc(18px * var(--skala-teks));
+    letter-spacing:-.3px;
 }
 
 .btn-hapus-semua{
-    border:none;
-    background:#fee2e2;
+    flex:0 0 auto;
+    border:1px solid #fee2e2;
+    background:#fff7f7;
     color:#dc2626;
-    border-radius:10px;
-    padding:8px 10px;
+    border-radius:9px;
+    padding:8px 11px;
     font-size:calc(12px * var(--skala-teks));
     font-weight:bold;
     cursor:pointer;
+    transition:background .15s ease, border-color .15s ease;
+}
+
+.btn-hapus-semua:hover{
+    background:#fee2e2;
+    border-color:#fecaca;
+}
+
+.cari-produksi{
+    margin-bottom:14px;
+    background:#f9fafb;
+    transition:border-color .15s ease, background .15s ease;
+}
+
+.cari-produksi:focus{
+    background:white;
 }
 
 #daftarProduksi{
@@ -215,40 +272,72 @@ input:focus{
     overflow-y:auto;
     -webkit-overflow-scrolling:touch;
     overscroll-behavior:contain;
+    padding-right:3px;
+    scrollbar-width:thin;
+    scrollbar-color:#d1d5db transparent;
 }
 
 .item-produksi{
-    border:1px solid #e5e7eb;
-    border-radius:15px;
-    padding:14px;
-    margin-bottom:10px;
+    border:1px solid #edf0f4;
+    border-radius:14px;
+    padding:14px 15px;
+    margin-bottom:9px;
+    background:#fff;
+    transition:border-color .15s ease, box-shadow .15s ease;
+}
+
+.item-produksi:last-child{
+    margin-bottom:2px;
+}
+
+.item-produksi:hover{
+    border-color:#d7dcf5;
+    box-shadow:0 3px 12px rgba(31,41,55,.04);
 }
 
 .item-atas{
     display:flex;
     justify-content:space-between;
-    align-items:center;
-    gap:10px;
+    align-items:flex-start;
+    gap:12px;
+}
+
+.item-atas > div:first-child{
+    flex:0 0 auto;
+    padding-top:1px;
+}
+
+.item-atas > div:last-child{
+    display:flex;
+    flex:1;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    gap:6px;
+    min-width:0;
 }
 
 .jumlah{
-    font-size:calc(20px * var(--skala-teks));
+    font-size:calc(22px * var(--skala-teks));
     font-weight:bold;
+    color:#111827;
+    letter-spacing:-.5px;
 }
 
 .satuan{
     color:#6b7280;
     font-size:calc(13px * var(--skala-teks));
+    margin-left:3px;
 }
 
 .tag-kategori{
     display:inline-block;
     background:#eef2ff;
-    color:#4f46e5;
+    color:var(--warna-latar-tema,#4f46e5);
     padding:5px 9px;
-    border-radius:8px;
+    border-radius:999px;
     font-size:calc(11px * var(--skala-teks));
     font-weight:bold;
+    line-height:1.25;
 }
 
 .tag-kandang{
@@ -256,39 +345,68 @@ input:focus{
     background:#ecfdf5;
     color:#059669;
     padding:5px 9px;
-    border-radius:8px;
+    border-radius:999px;
     font-size:calc(11px * var(--skala-teks));
     font-weight:bold;
-    margin-left:5px;
+    line-height:1.25;
 }
 
 .detail-produksi{
-    margin-top:9px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 14px;
+    margin-top:12px;
+    padding-top:10px;
+    border-top:1px solid #f1f3f5;
     color:#6b7280;
     font-size:calc(12px * var(--skala-teks));
 }
 
+.detail-produksi span{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+}
+
 .item-bawah{
     display:flex;
-    justify-content:flex-end;
+    justify-content:space-between;
     align-items:center;
-    margin-top:12px;
-    gap:8px;
+    gap:10px;
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px solid #f1f3f5;
+}
+
+.item-bawah .detail-produksi{
+    flex:1;
+    min-width:0;
+    margin-top:0;
+    padding-top:0;
+    border-top:none;
+    gap:5px 10px;
+    font-size:calc(11px * var(--skala-teks));
+}
+
+.item-bawah .detail-produksi span{
+    white-space:nowrap;
 }
 
 .aksi-produksi{
     display:flex;
+    flex:0 0 auto;
     gap:6px;
 }
 
 .btn-edit,
 .btn-danger{
     border:none;
-    border-radius:9px;
-    padding:8px 10px;
-    font-size:calc(12px * var(--skala-teks));
+    border-radius:8px;
+    padding:7px 8px;
+    font-size:calc(11px * var(--skala-teks));
     font-weight:bold;
     cursor:pointer;
+    transition:background .15s ease, transform .12s ease;
 }
 
 .btn-edit{
@@ -296,9 +414,17 @@ input:focus{
     color:#4f46e5;
 }
 
+.btn-edit:hover{
+    background:#e0e7ff;
+}
+
 .btn-danger{
-    background:#fee2e2;
+    background:#fff1f2;
     color:#dc2626;
+}
+
+.btn-danger:hover{
+    background:#fee2e2;
 }
 
 .bottom-nav{
@@ -379,13 +505,48 @@ input:focus{
     font-size:calc(12px * var(--skala-teks));
 }
 
+.pilih-warna-latar{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:16px;
+}
+
+.pilih-warna-latar input[type="color"]{
+    width:68px;
+    height:52px;
+    padding:5px;
+    cursor:pointer;
+}
+
+.daftar-warna-latar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin:12px 0 18px;
+}
+
+.swatch-warna-latar{
+    width:38px;
+    height:38px;
+    border:2px solid white;
+    border-radius:50%;
+    box-shadow:0 0 0 1px #d1d5db;
+    cursor:pointer;
+}
+
+.swatch-warna-latar.terpilih{
+    box-shadow:0 0 0 2px #1f2937;
+}
+
 .back-btn{
     border:none;
-    background:transparent;
+    background:var(--warna-latar-tema,#4f46e5);
     font-size:calc(15px * var(--skala-teks));
-    padding:5px 0;
+    padding:8px 12px;
     margin-bottom:15px;
-    color:#4f46e5;
+    color:var(--warna-teks-tema,white);
+    border-radius:10px;
     font-weight:bold;
     cursor:pointer;
 }
@@ -403,6 +564,7 @@ input:focus{
 
 .page-title h2{
     font-size:calc(22px * var(--skala-teks));
+    color:var(--warna-teks-tema,#1f2937);
 }
 
 .card-header{
@@ -661,7 +823,8 @@ input:focus{
 }
 
 #modalPesan .btn-danger-confirm{
-    background:#4f46e5;
+    background:var(--warna-latar-tema,#4f46e5);
+    color:var(--warna-teks-tema,white);
 }
 
 .table-wrapper{
@@ -675,7 +838,21 @@ input:focus{
     position:sticky;
     top:0;
     z-index:1;
-    box-shadow:0 1px 0 #e5e7eb;
+    background:var(--warna-latar-tema,#f9fafb);
+    color:var(--warna-teks-tema,#1f2937);
+    border-bottom:2px solid color-mix(
+        in srgb,
+        var(--warna-teks-tema,#1f2937) 18%,
+        transparent
+    );
+}
+
+.table-wrapper thead th:first-child{
+    border-radius:12px 0 0 12px;
+}
+
+.table-wrapper thead th:last-child{
+    border-radius:0 12px 12px 0;
 }
 
 table{
@@ -1069,6 +1246,18 @@ th{
     }
 }
 
+@media(max-width:360px){
+
+    .label-aksi{
+        display:none;
+    }
+
+    .btn-edit,
+    .btn-danger{
+        padding:7px;
+    }
+}
+
 .fab-tambah{
     position:fixed;
     right:calc(max(0px, 50vw - 350px) + 14px);
@@ -1080,18 +1269,18 @@ th{
     border:none;
     border-radius:999px;
     padding:12px 22px 12px 14px;
-    background:linear-gradient(135deg,#4f46e5,#6d5ef5);
-    color:white;
+    background:var(--warna-latar-tema,linear-gradient(135deg,#4f46e5,#6d5ef5));
+    color:var(--warna-teks-tema,white);
     font-size:calc(14px * var(--skala-teks));
     font-weight:bold;
     cursor:pointer;
-    box-shadow:0 8px 22px rgba(79,70,229,.45);
+    box-shadow:0 8px 22px rgba(0,0,0,.22);
     transition:transform .15s ease, box-shadow .15s ease;
 }
 
 .fab-tambah:active{
     transform:scale(.94);
-    box-shadow:0 4px 12px rgba(79,70,229,.4);
+    box-shadow:0 4px 12px rgba(0,0,0,.18);
 }
 
 .fab-plus{
@@ -1162,6 +1351,131 @@ th{
 }
 </style>
 <script>
+/* =====================================================
+   WARNA LATAR APLIKASI
+===================================================== */
+const KUNCI_WARNA_LATAR = "warnaLatarAplikasi";
+const WARNA_DEFAULT_TEMA = "#5b35d5";
+const OPSI_WARNA_LATAR = [
+    "#5b35d5",
+    "#2563eb",
+    "#0f766e",
+    "#15803d",
+    "#b45309",
+    "#be123c",
+    "#f4f6f8",
+    "#1f2937"
+];
+
+function warnaLatarTersimpan(){
+
+    let warna;
+
+    try{
+        warna = localStorage.getItem(KUNCI_WARNA_LATAR);
+    }catch(e){
+        console.error("Gagal membaca pengaturan warna latar.",e);
+        return null;
+    }
+
+    if(warna === null) return null;
+
+    if(!/^#[0-9a-fA-F]{6}$/.test(warna)){
+        console.warn("Pengaturan warna latar tidak valid.");
+        return null;
+    }
+
+    return warna;
+}
+
+function terapkanWarnaLatar(warna){
+
+    const root = document.documentElement.style;
+
+    if(warna){
+        root.setProperty("--warna-latar-aplikasi",warna);
+        root.setProperty("--warna-latar-tema",warna);
+
+        const angka = warna.slice(1).match(/.{2}/g).map(nilai =>
+            parseInt(nilai,16) / 255
+        );
+        const linear = angka.map(nilai =>
+            nilai <= 0.04045 ? nilai / 12.92 : ((nilai + 0.055) / 1.055) ** 2.4
+        );
+        const terang =
+            0.2126 * linear[0] +
+            0.7152 * linear[1] +
+            0.0722 * linear[2];
+        const warnaTeks = terang > 0.35 ? "#1f2937" : "#ffffff";
+        const warnaSubteks = terang > 0.35 ? "#4b5563" : "rgba(255,255,255,.82)";
+
+        root.setProperty("--warna-teks-tema",warnaTeks);
+        root.setProperty("--warna-subteks-tema",warnaSubteks);
+    }else{
+        root.removeProperty("--warna-latar-aplikasi");
+        root.removeProperty("--warna-latar-tema");
+        root.removeProperty("--warna-teks-tema");
+        root.removeProperty("--warna-subteks-tema");
+    }
+
+    const input = document.getElementById("inputWarnaLatar");
+
+    if(input) input.value = warna || WARNA_DEFAULT_TEMA;
+
+    document
+        .querySelectorAll("[data-warna-latar]")
+        .forEach(btn => {
+            const terpilih =
+                btn.getAttribute("data-warna-latar") === (warna || "");
+
+            btn.classList.toggle("terpilih",terpilih);
+            btn.setAttribute("aria-pressed",String(terpilih));
+        });
+}
+
+function pilihWarnaLatar(warna){
+
+    if(!/^#[0-9a-fA-F]{6}$/.test(warna)) return;
+
+    try{
+        localStorage.setItem(KUNCI_WARNA_LATAR,warna);
+    }catch(e){
+        console.error("Gagal menyimpan pengaturan warna latar.",e);
+        terapkanWarnaLatar(warnaLatarTersimpan());
+        tampilkanPeringatan(
+            "Warna latar tidak dapat disimpan. Periksa ruang penyimpanan aplikasi.",
+            "Pengaturan Tidak Tersimpan"
+        );
+        return;
+    }
+
+    terapkanWarnaLatar(warna);
+}
+
+function pulihkanWarnaLatarDefault(){
+
+    try{
+        localStorage.removeItem(KUNCI_WARNA_LATAR);
+    }catch(e){
+        console.error("Gagal menghapus pengaturan warna latar.",e);
+        tampilkanPeringatan(
+            "Warna latar bawaan tidak dapat dipulihkan karena pengaturan gagal disimpan.",
+            "Pengaturan Tidak Tersimpan"
+        );
+        return;
+    }
+
+    terapkanWarnaLatar(null);
+}
+
+function bukaTemaLatar(){
+
+    tampilkanHalamanInternal("halamanTemaLatar");
+    terapkanWarnaLatar(warnaLatarTersimpan());
+}
+
+terapkanWarnaLatar(warnaLatarTersimpan());
+
 /* =====================================================
    UKURAN TULISAN (otomatis / preset / manual)
 ===================================================== */
@@ -1347,7 +1661,7 @@ document.addEventListener(
      DASHBOARD
 ===================================================== -->
 
-<div id="halamanDashboard" class="halaman aktif">
+<div id="halamanDashboard" class="halaman aktif latar-utama">
 
 <div class="container">
 
@@ -1397,8 +1711,8 @@ document.addEventListener(
         <input
             type="text"
             id="cariProduksi"
-            placeholder="🔍 Cari tanggal, sekat, atau jumlah telur..."
-            style="margin-bottom:12px"
+            class="cari-produksi"
+            placeholder="🔍 Cari Tanggal, Sekat, atau Jumlah Telur..."
             oninput="tampilkanCatatan()">
 
         <div id="daftarProduksi"></div>
@@ -1414,7 +1728,7 @@ document.addEventListener(
      LAPORAN
 ===================================================== -->
 
-<div id="halamanLaporan" class="halaman">
+<div id="halamanLaporan" class="halaman latar-utama">
 
 <div class="container">
 
@@ -1496,7 +1810,7 @@ document.addEventListener(
         <div class="row">
 
             <button
-                class="btn-primary"
+                class="btn-primary btn-ekspor"
                 style="height:46px"
                 onclick="eksporPDF()">
 
@@ -1505,7 +1819,7 @@ document.addEventListener(
             </button>
 
             <button
-                class="btn-primary"
+                class="btn-primary btn-ekspor"
                 style="height:46px"
                 onclick="eksporExcel()">
 
@@ -1523,12 +1837,12 @@ document.addEventListener(
                 id="urutLaporan"
                 onchange="ubahUrutLaporan()">
 
-                <option value="tanggal-baru">📅 Tanggal: terbaru → terlama</option>
-                <option value="tanggal-lama">📅 Tanggal: terlama → terbaru</option>
-                <option value="kandang-banyak">🏠 Kandang / Sekat: terbanyak → tersedikit</option>
-                <option value="kandang-sedikit">🏠 Kandang / Sekat: tersedikit → terbanyak</option>
-                <option value="jumlah-besar">🔢 Jumlah: terbesar → terkecil</option>
-                <option value="jumlah-kecil">🔢 Jumlah: terkecil → terbesar</option>
+                <option value="tanggal-baru">📅 Tanggal: Terbaru → Terlama</option>
+                <option value="tanggal-lama">📅 Tanggal: Terlama → Terbaru</option>
+                <option value="kandang-banyak">🏠 Kandang / Sekat: Terbanyak → Tersedikit</option>
+                <option value="kandang-sedikit">🏠 Kandang / Sekat: Tersedikit → Terbanyak</option>
+                <option value="jumlah-besar">🔢 Jumlah: Terbesar → Terkecil</option>
+                <option value="jumlah-kecil">🔢 Jumlah: Terkecil → Terbesar</option>
 
             </select>
 
@@ -1578,7 +1892,7 @@ document.addEventListener(
      PENGATURAN
 ===================================================== -->
 
-<div id="halamanPengaturan" class="halaman">
+<div id="halamanPengaturan" class="halaman latar-utama">
 
 <div class="container">
 
@@ -1676,6 +1990,20 @@ document.addEventListener(
 
         </button>
 
+        <button onclick="bukaTemaLatar()">
+
+            <span class="menu-icon">🎨</span>
+
+            <span class="menu-title">
+                Warna Latar
+            </span>
+
+            <div class="menu-desc">
+                Sesuaikan warna latar aplikasi
+            </div>
+
+        </button>
+
         <button onclick="bukaBackupRestore()">
 
             <span class="menu-icon">💾</span>
@@ -1768,7 +2096,7 @@ document.addEventListener(
                     onkeydown="if(event.key==='Enter')terapkanSkalaManual()">
 
                 <button
-                    class="btn-primary"
+                    class="btn-primary btn-tema"
                     style="width:auto;padding:0 20px;height:48px"
                     onclick="terapkanSkalaManual()">
 
@@ -1790,6 +2118,145 @@ document.addEventListener(
             <span>📅 Contoh tulisan: tanggal, jam, dan nama kandang.</span>
 
         </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     WARNA LATAR
+===================================================== -->
+
+<div id="halamanTemaLatar" class="halaman">
+
+<div class="container">
+
+    <button
+        class="back-btn"
+        onclick="kembaliKePengaturan()">
+
+        ← Kembali
+
+    </button>
+
+    <div class="page-title">
+
+        <span class="icon">🎨</span>
+
+        <h2>Warna Latar</h2>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h3>Pilih warna aplikasi</h3>
+
+        </div>
+
+        <div class="pilih-warna-latar">
+
+            <input
+                type="color"
+                id="inputWarnaLatar"
+                value="#5b35d5"
+                aria-label="Pilih warna latar aplikasi"
+                oninput="pilihWarnaLatar(this.value)">
+
+            <span>Sentuh kotak warna untuk memilih warna sesuai keinginan.</span>
+
+        </div>
+
+        <strong>Warna pilihan</strong>
+
+        <div class="daftar-warna-latar" aria-label="Pilihan warna latar">
+
+            <button
+                type="button"
+                class="swatch-warna-latar"
+                data-warna-latar="#5b35d5"
+                style="background-color:#5b35d5"
+                aria-label="Ungu"
+                aria-pressed="false"
+                onclick="pilihWarnaLatar('#5b35d5')"></button>
+
+            <button
+                type="button"
+                class="swatch-warna-latar"
+                data-warna-latar="#2563eb"
+                style="background-color:#2563eb"
+                aria-label="Biru"
+                aria-pressed="false"
+                onclick="pilihWarnaLatar('#2563eb')"></button>
+
+            <button
+                type="button"
+                class="swatch-warna-latar"
+                data-warna-latar="#0f766e"
+                style="background-color:#0f766e"
+                aria-label="Teal"
+                aria-pressed="false"
+                onclick="pilihWarnaLatar('#0f766e')"></button>
+
+            <button
+                type="button"
+                class="swatch-warna-latar"
+                data-warna-latar="#15803d"
+                style="background-color:#15803d"
+                aria-label="Hijau"
+                aria-pressed="false"
+                onclick="pilihWarnaLatar('#15803d')"></button>
+
+            <button
+                type="button"
+                class="swatch-warna-latar"
+                data-warna-latar="#b45309"
+                style="background-color:#b45309"
+                aria-label="Oranye"
+                aria-pressed="false"
+                onclick="pilihWarnaLatar('#b45309')"></button>
+
+            <button
+                type="button"
+                class="swatch-warna-latar"
+                data-warna-latar="#be123c"
+                style="background-color:#be123c"
+                aria-label="Merah"
+                aria-pressed="false"
+                onclick="pilihWarnaLatar('#be123c')"></button>
+
+            <button
+                type="button"
+                class="swatch-warna-latar"
+                data-warna-latar="#f4f6f8"
+                style="background-color:#f4f6f8"
+                aria-label="Abu-abu terang"
+                aria-pressed="false"
+                onclick="pilihWarnaLatar('#f4f6f8')"></button>
+
+            <button
+                type="button"
+                class="swatch-warna-latar"
+                data-warna-latar="#1f2937"
+                style="background-color:#1f2937"
+                aria-label="Abu-abu gelap"
+                aria-pressed="false"
+                onclick="pilihWarnaLatar('#1f2937')"></button>
+
+        </div>
+
+        <button
+            type="button"
+            class="btn-cancel btn-tema"
+            onclick="pulihkanWarnaLatarDefault()">
+
+            Pulihkan Warna Bawaan
+
+        </button>
 
     </div>
 
@@ -1838,7 +2305,7 @@ document.addEventListener(
         </div>
 
         <button
-            class="btn-primary"
+            class="btn-primary btn-tema"
             onclick="unduhBackup()">
 
             ⬇️ Unduh Backup
@@ -1869,7 +2336,7 @@ document.addEventListener(
             onchange="pilihFileRestore(this)">
 
         <button
-            class="btn-primary"
+            class="btn-primary btn-tema"
             onclick="document.getElementById('fileRestore').click()">
 
             ⬆️ Pilih File Backup
@@ -1911,10 +2378,10 @@ document.addEventListener(
 
         <div class="card-header">
 
-            <h3>Pembukuan</h3>
+            <h3>Pilih Pembukuan</h3>
 
             <button
-                class="btn-tambah"
+                class="btn-tambah btn-tema"
                 onclick="bukaModalPembukuan()">
 
                 + Tambah
@@ -1966,7 +2433,7 @@ document.addEventListener(
             <h3>Daftar Kategori</h3>
 
             <button
-                class="btn-tambah"
+                class="btn-tambah btn-tema"
                 onclick="bukaModalKategoriCatatan()">
 
                 + Tambah
@@ -2018,7 +2485,7 @@ document.addEventListener(
             <h3>Daftar Satuan</h3>
 
             <button
-                class="btn-tambah"
+                class="btn-tambah btn-tema"
                 onclick="bukaModalKategoriSatuan()">
 
                 + Tambah
@@ -2070,7 +2537,7 @@ document.addEventListener(
             <h3>Daftar Kandang / Sekat</h3>
 
             <button
-                class="btn-tambah"
+                class="btn-tambah btn-tema"
                 onclick="bukaModalKategoriKandang()">
 
                 + Tambah
@@ -2140,7 +2607,7 @@ document.addEventListener(
                 </div>
 
                 <button
-                    class="btn-tambah"
+                    class="btn-tambah btn-tema"
                     onclick="ubahPin()">
 
                     Ubah
@@ -2191,7 +2658,7 @@ document.addEventListener(
                 </div>
 
                 <button
-                    class="btn-tambah"
+                    class="btn-tambah btn-tema"
                     onclick="kunciSekarang()">
 
                     Kunci
@@ -2255,7 +2722,7 @@ document.addEventListener(
         </div>
 
         <button
-            class="btn-primary"
+            class="btn-primary btn-tema"
             onclick="simpanPembukuan()">
 
             Simpan
@@ -2308,7 +2775,7 @@ document.addEventListener(
         </div>
 
         <button
-            class="btn-primary"
+            class="btn-primary btn-tema"
             onclick="simpanKategoriCatatan()">
 
             Simpan
@@ -2361,7 +2828,7 @@ document.addEventListener(
         </div>
 
         <button
-            class="btn-primary"
+            class="btn-primary btn-tema"
             onclick="simpanKategoriSatuan()">
 
             Simpan
@@ -2414,7 +2881,7 @@ document.addEventListener(
         </div>
 
         <button
-            class="btn-primary"
+            class="btn-primary btn-tema"
             onclick="simpanKategoriKandang()">
 
             Simpan
@@ -2521,7 +2988,7 @@ document.addEventListener(
 
         <button
             id="btnSimpanProduksi"
-            class="btn-primary"
+            class="btn-primary btn-tema"
             onclick="tambahCatatan()">
 
             + Simpan Produksi
@@ -2798,7 +3265,7 @@ document.addEventListener(
         </div>
 
         <button
-            class="btn-danger-confirm"
+            class="btn-danger-confirm btn-tema"
             style="width:100%;"
             onclick="tutupModalPesan()">
 
@@ -2893,7 +3360,7 @@ document.addEventListener(
                 onclick="masukLoginPin()">
 
                 <span>🔐</span>
-                Login dengan PIN
+                Login Dengan PIN
 
             </button>
 
@@ -3963,7 +4430,7 @@ function tampilkanKategoriCatatanDropdown(){
         const nilaiLama = el.value;
 
         el.innerHTML =
-            '<option value="">Pilih catatan</option>';
+            '<option value="">Pilih Catatan</option>';
 
         daftarKategoriCatatan.forEach(
             nama => {
@@ -4252,7 +4719,7 @@ function tampilkanKategoriSatuanDropdown(){
         const nilaiLama = el.value;
 
         el.innerHTML =
-            '<option value="">Pilih satuan</option>';
+            '<option value="">Pilih Satuan</option>';
 
         daftarKategoriSatuan.forEach(
             nama => {
@@ -4544,7 +5011,7 @@ function tampilkanKategoriKandangDropdown(){
 
         select.innerHTML =
             `<option value="">
-                Pilih kandang / sekat
+                Pilih Kandang / Sekat
              </option>`;
 
         daftarKategoriKandang.forEach(
@@ -5326,35 +5793,39 @@ function tampilkanCatatan(){
 
             </div>
 
-            <div class="detail-produksi">
-
-                📅 ${formatTanggal(item.tanggal)}
-
-                &nbsp;&nbsp;
-
-                ⏰ ${escapeHTML(
-                    item.jam || "-"
-                )}
-
-            </div>
-
             <div class="item-bawah">
+
+                <div class="detail-produksi">
+
+                    <span>
+                        📅 ${formatTanggal(item.tanggal)}
+                    </span>
+
+                    <span>
+                        ⏰ ${escapeHTML(item.jam || "-")}
+                    </span>
+
+                </div>
 
                 <div class="aksi-produksi">
 
                     <button
                         class="btn-edit"
+                        aria-label="Edit catatan produksi"
+                        title="Edit catatan produksi"
                         onclick="editCatatan(${index})">
 
-                        ✏️ Edit
+                        ✏️ <span class="label-aksi">Edit</span>
 
                     </button>
 
                     <button
                         class="btn-danger"
+                        aria-label="Hapus catatan produksi"
+                        title="Hapus catatan produksi"
                         onclick="mintaHapusCatatan(${index})">
 
-                        🗑️ Hapus
+                        🗑️ <span class="label-aksi">Hapus</span>
 
                     </button>
 
